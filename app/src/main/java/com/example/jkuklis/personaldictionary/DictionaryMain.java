@@ -23,8 +23,8 @@ public class DictionaryMain extends AppCompatActivity implements
         View.OnClickListener
     {
 
-    private static final String POSITION_INFO = "";
-    private static final String ID_INFO = "";
+    public static final String POSITION_INFO = "";
+    public static final String ID_INFO = "";
 
     private static final String auth_fail = "STRANGE: Failed to authorize";
     private TextView mStatusTextView;
@@ -81,8 +81,6 @@ public class DictionaryMain extends AppCompatActivity implements
         } else {
             mStatusTextView.setText(auth_fail);
         }
-
-        //mStatusTextView.setText(String.valueOf(MainActivity.getGoogleApi().isConnected()));
     }
 
 

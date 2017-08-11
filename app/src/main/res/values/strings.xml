@@ -14,4 +14,6 @@
     <string name="import_dict">Import dictionary</string>
     <string name="title_activity_login">Sign in</string>
     <string name="login_info">Login info</string>
+    <string name="position_placeholder">Position</string>
+    <string name="id_placeholder">ID</string>
 </resources>

@@ -6,4 +6,25 @@
     android:layout_height="match_parent"
     tools:context="com.example.jkuklis.personaldictionary.DictionaryShow">
 
+    <TextView
+        android:id="@+id/position"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="@string/position_placeholder"
+        android:textSize="24sp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="42dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <TextView
+        android:id="@+id/id"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="31dp"
+        android:text="@string/id_placeholder"
+        android:textSize="24sp"
+        app:layout_constraintLeft_toRightOf="@+id/position"
+        app:layout_constraintTop_toTopOf="@+id/position"
+        android:layout_marginTop="0dp" />
 </android.support.constraint.ConstraintLayout>
