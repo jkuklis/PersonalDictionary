@@ -12,10 +12,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 
+import java.util.ArrayList;
+
 public class DictionaryMain extends AppCompatActivity {
 
     private static final String auth_fail = "STRANGE: Failed to authorize";
     private TextView mStatusTextView;
+
+    private ArrayList<String> dictionaries = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +28,8 @@ public class DictionaryMain extends AppCompatActivity {
 
         mStatusTextView = (TextView) findViewById(R.id.login_info);
 
+        dictionaries.add("pl-en");
+        dictionaries.add("pl-de");
     }
 
     @Override

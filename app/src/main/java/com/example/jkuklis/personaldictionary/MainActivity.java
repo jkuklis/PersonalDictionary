@@ -218,8 +218,12 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void jumpDictionary() {
-        Intent intent = new Intent(this, DictionaryMain.class);
-        startActivity(intent);
+        if (mGoogleApiClient.isConnected()) {
+            Intent intent = new Intent(this, DictionaryMain.class);
+            startActivity(intent);
+        } else {
+            updateUI(false);
+        }
     }
 
     @Override
