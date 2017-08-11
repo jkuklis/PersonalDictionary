@@ -20,7 +20,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
 
-public class HelloScreen extends AppCompatActivity implements
+public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener {
 
@@ -28,9 +28,13 @@ public class HelloScreen extends AppCompatActivity implements
     private static final int RC_SIGN_IN = 9001;
     private static final String SIGN_IN_PROMPT = "Please sign in with your Google account";
 
-    private GoogleApiClient mGoogleApiClient;
+    private static GoogleApiClient mGoogleApiClient;
     private TextView mStatusTextView;
     private ProgressDialog mProgressDialog;
+
+    public static GoogleApiClient getGoogleApi() {
+        return mGoogleApiClient;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

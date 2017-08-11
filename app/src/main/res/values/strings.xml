@@ -11,4 +11,7 @@
     <string name="disconnect">Disconnect</string>
     <string name="create_new_dict">Create dictionary</string>
     <string name="dict_list">Your dictionaries</string>
+    <string name="import_dict">Import dictionary</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="login_info">Login info</string>
 </resources>
