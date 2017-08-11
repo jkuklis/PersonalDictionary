@@ -4,6 +4,8 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.auth.api.Auth;
@@ -30,6 +32,21 @@ public class DictionaryMain extends AppCompatActivity {
 
         dictionaries.add("pl-en");
         dictionaries.add("pl-de");
+        dictionaries.add("pl-de");
+        dictionaries.add("pl-de");
+        dictionaries.add("pl-de");
+        dictionaries.add("pl-de");
+        dictionaries.add("pl-de");
+        dictionaries.add("pl-de");
+        dictionaries.add("pl-de");
+        dictionaries.add("pl-de");
+        dictionaries.add("pl-de");
+        dictionaries.add("pl-de");
+
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.simple_list_item_1, dictionaries);
+        ListView listView = (ListView) findViewById(R.id.dict_list_view);
+        listView.setAdapter(adapter);
     }
 
     @Override
