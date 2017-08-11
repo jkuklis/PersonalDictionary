@@ -81,6 +81,8 @@ public class DictionaryMain extends AppCompatActivity implements
         } else {
             mStatusTextView.setText(auth_fail);
         }
+
+        //mStatusTextView.setText(String.valueOf(MainActivity.getGoogleApi().isConnected()));
     }
 
 
