@@ -26,6 +26,7 @@ public class HelloScreen extends AppCompatActivity implements
 
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
+    private static final String SIGN_IN_PROMPT = "Please sign in with your Google account";
 
     private GoogleApiClient mGoogleApiClient;
     private TextView mStatusTextView;
@@ -42,7 +43,7 @@ public class HelloScreen extends AppCompatActivity implements
         // Button listeners
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.sign_out_button).setOnClickListener(this);
-        findViewById(R.id.disconnect_button).setOnClickListener(this);
+        findViewById(R.id.dictionary_jump).setOnClickListener(this);
 
         // [START configure_signin]
         // Configure sign-in to request the user's ID, email address, and basic
@@ -79,6 +80,7 @@ public class HelloScreen extends AppCompatActivity implements
             Log.d(TAG, "Got cached sign-in");
             GoogleSignInResult result = opr.get();
             handleSignInResult(result);
+            updateUI(true);
         } else {
             // If the user has not previously signed in on this device or the sign-in has expired,
             // this asynchronous branch will attempt to sign in the user silently.  Cross-device
@@ -91,6 +93,7 @@ public class HelloScreen extends AppCompatActivity implements
                     handleSignInResult(googleSignInResult);
                 }
             });
+            updateUI(false);
         }
     }
 
@@ -119,10 +122,11 @@ public class HelloScreen extends AppCompatActivity implements
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
-            //mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
+            mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
             updateUI(true);
         } else {
             // Signed out, show unauthenticated UI.
+            mStatusTextView.setText(SIGN_IN_PROMPT);
             updateUI(false);
         }
     }
@@ -132,7 +136,7 @@ public class HelloScreen extends AppCompatActivity implements
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
-        updateUI(true);
+        //updateUI(true);
     }
     // [END signIn]
 
@@ -198,13 +202,19 @@ public class HelloScreen extends AppCompatActivity implements
     private void updateUI(boolean signedIn) {
         if (signedIn) {
             findViewById(R.id.sign_in_button).setVisibility(View.GONE);
-            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
+            findViewById(R.id.sign_out_button).setVisibility(View.VISIBLE);
+            findViewById(R.id.dictionary_jump).setVisibility(View.VISIBLE);
         } else {
-            mStatusTextView.setText(R.string.signed_out);
+            mStatusTextView.setText(SIGN_IN_PROMPT);
 
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
-            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
+            findViewById(R.id.sign_out_button).setVisibility(View.GONE);
+            findViewById(R.id.dictionary_jump).setVisibility(View.GONE);
         }
+    }
+
+    private void jumpDictionary() {
+
     }
 
     @Override
@@ -216,8 +226,13 @@ public class HelloScreen extends AppCompatActivity implements
             case R.id.sign_out_button:
                 signOut();
                 break;
-            case R.id.disconnect_button:
+            /*
+            case R.id.disconnect:
                 revokeAccess();
+                break;
+            */
+            case R.id.dictionary_jump:
+                jumpDictionary();
                 break;
         }
     }
