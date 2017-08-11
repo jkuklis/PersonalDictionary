@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "834634402034",
+    "project_id": "firebase-personal-dictionary"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:834634402034:android:552b43a051ce6f90",
+        "android_client_info": {
+          "package_name": "com.example.jkuklis.personaldictionary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "834634402034-l0lnkcpf76ctp95ksg3i1ghcq73kullo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.jkuklis.personaldictionary",
+            "certificate_hash": "23ed9ca49744e9a4169085f863b7d9426ab43f99"
+          }
+        },
+        {
+          "client_id": "834634402034-5k8ujpo4qj40fv4j4q4b1l55q0jt2289.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoAeJzfh2GFSs9OJvfGdzUKcGGb1308ck"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
