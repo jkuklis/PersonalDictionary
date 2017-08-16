@@ -2,6 +2,8 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#302cff</color>
     <color name="button">#ffd815</color>
+    <color name="action_button">#fff9c9</color>
+    <color name="delete_button">#dfdfdf</color>
 </resources>

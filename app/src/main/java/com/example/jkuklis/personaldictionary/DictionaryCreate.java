@@ -39,10 +39,14 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class DictionaryCreate extends Activity {
+import java.util.ArrayList;
 
-    private String[] arrText =
-            new String[]{"", ""};
+public class DictionaryCreate extends Activity implements
+        View.OnClickListener {
+
+    private ArrayList<String> languages = new ArrayList<>();
+    private MyListAdapter adapter;
+
     private String[] arrTemp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +54,15 @@ public class DictionaryCreate extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary_create);
 
-        arrTemp = new String[arrText.length];
+        languages.add("");
+        languages.add("");
+        arrTemp = new String[languages.size()];
 
-        MyListAdapter myListAdapter = new MyListAdapter();
+        adapter = new MyListAdapter();
+
         ListView listView = (ListView) findViewById(R.id.listViewMain);
-        listView.setAdapter(myListAdapter);
+        listView.setAdapter(adapter);
+
     }
 
     private class MyListAdapter extends BaseAdapter{
@@ -62,8 +70,8 @@ public class DictionaryCreate extends Activity {
         @Override
         public int getCount() {
             // TODO Auto-generated method stub
-            if(arrText != null && arrText.length != 0){
-                return arrText.length;
+            if(languages != null && languages.size() != 0){
+                return languages.size();
             }
             return 0;
         }
@@ -71,7 +79,7 @@ public class DictionaryCreate extends Activity {
         @Override
         public Object getItem(int position) {
             // TODO Auto-generated method stub
-            return arrText[position];
+            return languages.get(position);
         }
 
         @Override
@@ -102,7 +110,7 @@ public class DictionaryCreate extends Activity {
 
             holder.ref = position;
 
-            holder.textView1.setText(arrText[position]);
+            holder.textView1.setText(languages.get(position));
             holder.editText1.setText(arrTemp[position]);
             holder.editText1.addTextChangedListener(new TextWatcher() {
 
@@ -138,4 +146,17 @@ public class DictionaryCreate extends Activity {
 
     }
 
+    private void add_language() {
+        languages.add("");
+        arrTemp = new String[languages.size()];
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.addLanguage:
+                add_language();
+                break;
+        }
+    }
 }

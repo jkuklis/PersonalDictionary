@@ -17,4 +17,6 @@
     <string name="position_placeholder">Position</string>
     <string name="id_placeholder">ID</string>
     <string name="lang_list">Languages list</string>
+    <string name="lang_header">Language</string>
+    <string name="lang_short_header">Abbr</string>
 </resources>
