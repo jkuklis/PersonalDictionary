@@ -86,14 +86,14 @@ public class DictionaryMain extends AppCompatActivity implements
 
     private void create_dictionary() {
         OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(MainActivity.getGoogleApi());
-        if (opr.isDone()) {
+        //if (opr.isDone()) {
             Intent intent = new Intent(this, DictionaryCreate.class);
             startActivity(intent);
-        } else {
-            finish();
+        //} else {
+        //    finish();
 //            Intent intent = new Intent(this, MainActivity.class);
 //            startActivity(intent);
-        }
+        //}
     }
 
     private void import_dictionary() {

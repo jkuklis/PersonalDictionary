@@ -43,8 +43,6 @@ import java.util.ArrayList;
 
 public class DictionaryCreate extends Activity implements
         View.OnClickListener {
-
-    private ArrayList<String> languages = new ArrayList<>();
     private MyListAdapter adapter;
 
     private String[] arrTemp;
@@ -54,10 +52,6 @@ public class DictionaryCreate extends Activity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary_create);
 
-        languages.add("");
-        languages.add("");
-        arrTemp = new String[languages.size()];
-
         adapter = new MyListAdapter();
 
         ListView listView = (ListView) findViewById(R.id.listViewMain);
@@ -66,6 +60,13 @@ public class DictionaryCreate extends Activity implements
     }
 
     private class MyListAdapter extends BaseAdapter{
+        private ArrayList<String> languages = new ArrayList<>();
+
+        public MyListAdapter() {
+            super();
+            languages.add("");
+            languages.add("");
+        }
 
         @Override
         public int getCount() {
@@ -91,6 +92,8 @@ public class DictionaryCreate extends Activity implements
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
+            arrTemp = new String[languages.size()];
+
             //ViewHolder holder = null;
             final ViewHolder holder;
             if (convertView == null) {
@@ -98,7 +101,7 @@ public class DictionaryCreate extends Activity implements
                 holder = new ViewHolder();
                 LayoutInflater inflater = DictionaryCreate.this.getLayoutInflater();
                 convertView = inflater.inflate(R.layout.language_list_item, null);
-                holder.textView1 = (TextView) convertView.findViewById(R.id.textView1);
+                holder.textView1 = (EditText) convertView.findViewById(R.id.textView1);
                 holder.editText1 = (EditText) convertView.findViewById(R.id.editText1);
 
                 convertView.setTag(holder);
@@ -138,24 +141,26 @@ public class DictionaryCreate extends Activity implements
         }
 
         private class ViewHolder {
-            TextView textView1;
+            EditText textView1;
             EditText editText1;
             int ref;
         }
 
+        public void add_language() {
+            languages.add("");
+            this.notifyDataSetChanged();
+            ListView listView = (ListView) findViewById(R.id.listViewMain);
+            listView.setAdapter(new MyListAdapter());
+        }
 
-    }
 
-    private void add_language() {
-        languages.add("");
-        arrTemp = new String[languages.size()];
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addLanguage:
-                add_language();
+                adapter.add_language();
                 break;
         }
     }
