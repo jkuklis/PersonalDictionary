@@ -23,8 +23,8 @@ public class DictionaryMain extends AppCompatActivity implements
         View.OnClickListener
     {
 
-    public static final String POSITION_INFO = "";
-    public static final String ID_INFO = "";
+    public static final String POSITION_INFO = "Position placeholder";
+    public static final String ID_INFO = "ID placeholder";
 
     private static final String auth_fail = "STRANGE: Failed to authorize";
     private TextView mStatusTextView;
@@ -110,8 +110,8 @@ public class DictionaryMain extends AppCompatActivity implements
         OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(MainActivity.getGoogleApi());
         if (opr.isDone()) {
             Intent intent = new Intent(this, DictionaryShow.class);
-            intent.putExtra(POSITION_INFO, position);
-            intent.putExtra(ID_INFO, id);
+            intent.putExtra(POSITION_INFO, String.valueOf(position));
+            intent.putExtra(ID_INFO, String.valueOf(id));
             startActivity(intent);
         } else {
             finish();

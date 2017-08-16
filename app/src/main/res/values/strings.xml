@@ -16,4 +16,5 @@
     <string name="login_info">Login info</string>
     <string name="position_placeholder">Position</string>
     <string name="id_placeholder">ID</string>
+    <string name="lang_list">Languages list</string>
 </resources>
