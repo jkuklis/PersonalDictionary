@@ -1,34 +1,8 @@
 package com.example.jkuklis.personaldictionary;
 
-/*
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-
-import java.util.ArrayList;
-
-public class DictionaryCreate extends AppCompatActivity {
-
-    private ArrayList<String> languages = new ArrayList<>();
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dictionary_create);
-
-        languages.add("");
-        languages.add("");
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.language_name, languages);
-        ListView listView = (ListView) findViewById(R.id.languageList);
-        listView.setAdapter(adapter);
-    }
-}
-*/
-
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -56,6 +30,13 @@ public class DictionaryCreate extends Activity implements
 
         ListView listView = (ListView) findViewById(R.id.listViewMain);
         listView.setAdapter(adapter);
+
+        FloatingActionButton myFab = (FloatingActionButton)  findViewById(R.id.addLanguage);
+        myFab.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                adapter.add_language();
+            }
+        });
 
     }
 
@@ -148,9 +129,10 @@ public class DictionaryCreate extends Activity implements
 
         public void add_language() {
             languages.add("");
+
             this.notifyDataSetChanged();
-            ListView listView = (ListView) findViewById(R.id.listViewMain);
-            listView.setAdapter(new MyListAdapter());
+//            ListView listView = (ListView) findViewById(R.id.listViewMain);
+//            listView.setAdapter(new MyListAdapter());
         }
 
 
@@ -159,9 +141,11 @@ public class DictionaryCreate extends Activity implements
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.addLanguage:
-                adapter.add_language();
-                break;
+//            case R.id.addLanguage:
+//                adapter.add_language();
+//                TextView txt = (TextView) findViewById(R.id.languageHeader);
+//                txt.setText("das");
+//                break;
         }
     }
 }
