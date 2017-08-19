@@ -3,6 +3,7 @@ package com.example.jkuklis.personaldictionary;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -18,7 +19,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DictionaryCreate extends Activity implements
+public class DictionaryCreate extends AppCompatActivity implements
         View.OnClickListener {
     private final String LANG_LOWER_LIMIT = "Min 1 language!";
     private final String LANG_UPPER_LIMIT = "Max 5 languages!";
@@ -43,7 +44,6 @@ public class DictionaryCreate extends Activity implements
                 adapter.add_language();
             }
         });
-
     }
 
     private class Language {

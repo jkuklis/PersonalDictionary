@@ -32,9 +32,32 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".DictionaryCreate" />
-        <activity android:name=".DictionaryImport" />
-        <activity android:name=".DictionaryShow" />
+        <activity
+            android:name=".DictionaryCreate"
+            android:parentActivityName=".DictionaryMain"
+            android:windowSoftInputMode="adjustResize"
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".DictionaryMain"
+                />
+        </activity>
+        <activity
+            android:name=".DictionaryImport"
+            android:parentActivityName=".DictionaryMain">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".DictionaryMain"
+                />
+        </activity>
+        <activity
+            android:name=".DictionaryShow"
+            android:parentActivityName=".DictionaryMain">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".DictionaryMain"
+                />
+        </activity>
         <activity
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"
