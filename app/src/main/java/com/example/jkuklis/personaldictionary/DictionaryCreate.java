@@ -20,6 +20,9 @@ import java.util.List;
 
 public class DictionaryCreate extends Activity implements
         View.OnClickListener {
+    private final String LANG_LOWER_LIMIT = "Min 1 language!";
+    private final String LANG_UPPER_LIMIT = "Max 5 languages!";
+
     private MyListAdapter adapter;
 
     private String[] arrTemp;
@@ -43,13 +46,39 @@ public class DictionaryCreate extends Activity implements
 
     }
 
+    private class Language {
+        private String name;
+        private String abbr;
+
+        Language(String name, String abbr) {
+            this.name = name;
+            this.abbr = abbr;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public void setAbbr(String abbr) {
+            this.abbr = abbr;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+
+        public String getAbbr() {
+            return this.abbr;
+        }
+    }
+
     private class MyListAdapter extends BaseAdapter implements ListAdapter {
-        private ArrayList<String> languages = new ArrayList<>();
+        private ArrayList<Language> languages = new ArrayList<>();
 
         public MyListAdapter() {
             super();
-            languages.add("");
-            languages.add("");
+            languages.add(new Language("", ""));
+            languages.add(new Language("", ""));
         }
 
         @Override
@@ -105,20 +134,57 @@ public class DictionaryCreate extends Activity implements
                 }
             });
 
-            holder.lang_name.setText(languages.get(position));
-            holder.lang_abbr.setText(arrTemp[position]);
-            holder.lang_abbr.addTextChangedListener(new TextWatcher() {
-
-
+            holder.lang_name.setText(languages.get(position).getName());
+            holder.lang_name.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+                    //TextView txt = (TextView) findViewById(R.id.languageHeader);
+                    //txt.setText(String.valueOf(arg0) + " " + String.valueOf(arg1) + " " + String.valueOf(arg2) + " " + String.valueOf(arg3));
+
+                    languages.get(position).setName(String.valueOf(arg0));
+                    //txt.setText(languages.get(position));
                     // TODO Auto-generated method stub
 
                 }
 
                 @Override
                 public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
-                        int arg3) {
+                                              int arg3) {
+                    // TODO Auto-generated method stub
+                    TextView warning = (TextView) findViewById(R.id.warningPlaceholder);
+                    warning.setVisibility(View.INVISIBLE);
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable arg0) {
+                    // TODO Auto-generated method stub
+                    arrTemp[holder.ref] = arg0.toString();
+                }
+            });
+
+            holder.lang_name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    TextView warning = (TextView) findViewById(R.id.warningPlaceholder);
+                    warning.setVisibility(View.INVISIBLE);
+                }
+            });
+
+            holder.lang_abbr.setText(languages.get(position).getAbbr());
+            holder.lang_abbr.addTextChangedListener(new TextWatcher() {
+
+
+                @Override
+                public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+
+                    languages.get(position).setAbbr(String.valueOf(arg0));
+                    // TODO Auto-generated method stub
+
+                }
+
+                @Override
+                public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
                     // TODO Auto-generated method stub
 
                 }
@@ -127,6 +193,14 @@ public class DictionaryCreate extends Activity implements
                 public void afterTextChanged(Editable arg0) {
                     // TODO Auto-generated method stub
                     arrTemp[holder.ref] = arg0.toString();
+                }
+            });
+
+            holder.lang_abbr.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    TextView warning = (TextView) findViewById(R.id.warningPlaceholder);
+                    warning.setVisibility(View.INVISIBLE);
                 }
             });
 
@@ -141,16 +215,37 @@ public class DictionaryCreate extends Activity implements
         }
 
         public void add_language() {
-            languages.add("");
+            if (languages.size() < 5) {
 
-            this.notifyDataSetChanged();
+                for (int i = 0; i < languages.size(); i++) {
+                }
 
+                languages.add(new Language("", ""));
+
+                this.notifyDataSetChanged();
+            } else {
+
+                TextView warning = (TextView) findViewById(R.id.warningPlaceholder);
+                warning.setVisibility(View.VISIBLE);
+                warning.setText(LANG_UPPER_LIMIT);
+            }
         }
 
         public void delete_language(int position) {
-            languages.remove(position);
+            if (languages.size() > 1) {
 
-            this.notifyDataSetChanged();
+                languages.remove(position);
+
+                TextView warning = (TextView) findViewById(R.id.warningPlaceholder);
+                warning.setVisibility(View.INVISIBLE);
+
+                this.notifyDataSetChanged();
+            } else {
+                TextView warning = (TextView) findViewById(R.id.warningPlaceholder);
+                warning.setVisibility(View.VISIBLE);
+                warning.setText(LANG_LOWER_LIMIT);
+
+            }
         }
 
 

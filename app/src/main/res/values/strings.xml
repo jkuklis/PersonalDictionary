@@ -20,4 +20,6 @@
     <string name="lang_header">Language</string>
     <string name="lang_short_header">Abbr</string>
     <string name="title_activity_main2">Main2Activity</string>
+    <string name="warning_placeholder">Warning placeholder</string>
+    <string name="create_dictionary">Create</string>
 </resources>
