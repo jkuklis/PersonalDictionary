@@ -9,11 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DictionaryCreate extends Activity implements
         View.OnClickListener {
@@ -40,7 +43,7 @@ public class DictionaryCreate extends Activity implements
 
     }
 
-    private class MyListAdapter extends BaseAdapter{
+    private class MyListAdapter extends BaseAdapter implements ListAdapter {
         private ArrayList<String> languages = new ArrayList<>();
 
         public MyListAdapter() {
@@ -71,19 +74,19 @@ public class DictionaryCreate extends Activity implements
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
 
             arrTemp = new String[languages.size()];
 
-            //ViewHolder holder = null;
             final ViewHolder holder;
             if (convertView == null) {
 
                 holder = new ViewHolder();
                 LayoutInflater inflater = DictionaryCreate.this.getLayoutInflater();
                 convertView = inflater.inflate(R.layout.language_list_item, null);
-                holder.textView1 = (EditText) convertView.findViewById(R.id.textView1);
-                holder.editText1 = (EditText) convertView.findViewById(R.id.editText1);
+                holder.lang_name = (EditText) convertView.findViewById(R.id.language_name);
+                holder.lang_abbr = (EditText) convertView.findViewById(R.id.language_abbreviation);
+                holder.del_btn = (FloatingActionButton) convertView.findViewById(R.id.delete_language_button);
 
                 convertView.setTag(holder);
 
@@ -94,9 +97,18 @@ public class DictionaryCreate extends Activity implements
 
             holder.ref = position;
 
-            holder.textView1.setText(languages.get(position));
-            holder.editText1.setText(arrTemp[position]);
-            holder.editText1.addTextChangedListener(new TextWatcher() {
+            holder.del_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //MyListAdapter.this.delete_language(position);
+                    delete_language(position);
+                }
+            });
+
+            holder.lang_name.setText(languages.get(position));
+            holder.lang_abbr.setText(arrTemp[position]);
+            holder.lang_abbr.addTextChangedListener(new TextWatcher() {
+
 
                 @Override
                 public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
@@ -122,8 +134,9 @@ public class DictionaryCreate extends Activity implements
         }
 
         private class ViewHolder {
-            EditText textView1;
-            EditText editText1;
+            EditText lang_name;
+            EditText lang_abbr;
+            FloatingActionButton del_btn;
             int ref;
         }
 
@@ -131,8 +144,13 @@ public class DictionaryCreate extends Activity implements
             languages.add("");
 
             this.notifyDataSetChanged();
-//            ListView listView = (ListView) findViewById(R.id.listViewMain);
-//            listView.setAdapter(new MyListAdapter());
+
+        }
+
+        public void delete_language(int position) {
+            languages.remove(position);
+
+            this.notifyDataSetChanged();
         }
 
 
@@ -141,11 +159,6 @@ public class DictionaryCreate extends Activity implements
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-//            case R.id.addLanguage:
-//                adapter.add_language();
-//                TextView txt = (TextView) findViewById(R.id.languageHeader);
-//                txt.setText("das");
-//                break;
         }
     }
 }
