@@ -137,7 +137,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
     public Dictionary getDictionary(long dictId) {
-        Dictionary dict = new Dictionary(0, "ERROR");
+        Dictionary dict = new Dictionary(0, "ERROR", "ERROR");
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -303,11 +303,11 @@ public class DbHelper extends SQLiteOpenHelper {
         return entries;
     }
 
-    public List<Word> getEntryWords(long entry_id) {
+    public List<Word> getEntryWords(long entryId) {
         List<Word> words = new ArrayList<Word>();
 
         String selectQuery = "SELECT * FROM " + TABLE_WORDS + " WHERE "
-                + WORD_ENTRY_ID + " = " + entry_id;
+                + WORD_ENTRY_ID + " = " + entryId;
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
@@ -329,10 +329,10 @@ public class DbHelper extends SQLiteOpenHelper {
         return words;
     }
 
-    public List<Word> getDictWords(long dict_id) {
+    public List<Word> getDictWords(long dictId) {
         List<Word> words = new ArrayList<Word>();
 
-        List<Entry> entries = getDictEntries(dict_id);
+        List<Entry> entries = getDictEntries(dictId);
 
         for (Entry entry : entries) {
             List<Word> entryWords = getEntryWords(entry.getId());
@@ -345,11 +345,48 @@ public class DbHelper extends SQLiteOpenHelper {
         return words;
     }
 
-    public void deleteWord(long word_id) {
+    public void deleteWord(long wordId) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_WORDS, WORD_ID + " = ?",
-                new String[] { String.valueOf(word_id)});
+                new String[] { String.valueOf(wordId)});
     }
 
+    public void deleteEntry(long entryId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_WORDS, WORD_ENTRY_ID + " = ?",
+                new String[] { String.valueOf(entryId)});
 
+        db.delete(TABLE_ENTRIES, ENTRY_ID + " = ?",
+                new String[] { String.valueOf(entryId)});
+    }
+
+    public void deleteLang(long langId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_LANGUAGES, LANG_ID + " = ?",
+                new String[] { String.valueOf(langId)});
+    }
+
+    public void deleteDictPosEntry(long dictId, int pos) {
+        Entry entry = getDictPosEntry(dictId, pos);
+
+        deleteEntry(entry.getId());
+    }
+
+    public void deleteDict(long dictId) {
+        List<Entry> entries = getDictEntries(dictId);
+
+        for (Entry entry : entries) {
+            deleteEntry(entry.getId());
+        }
+
+        List<Language> langs = getDictLanguages(dictId);
+
+        for (Language lang : langs) {
+            deleteLang(lang.getId());
+        }
+
+        deleteDict(dictId);
+    }
+
+    // no database updating yet
 }
