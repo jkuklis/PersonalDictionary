@@ -35,34 +35,31 @@
         <activity
             android:name=".DictionaryCreate"
             android:parentActivityName=".DictionaryMain"
-            android:windowSoftInputMode="adjustResize"
-            >
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".DictionaryMain"
-                />
+                android:value=".DictionaryMain" />
         </activity>
         <activity
             android:name=".DictionaryImport"
             android:parentActivityName=".DictionaryMain">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".DictionaryMain"
-                />
+                android:value=".DictionaryMain" />
         </activity>
         <activity
             android:name=".DictionaryShow"
             android:parentActivityName=".DictionaryMain">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".DictionaryMain"
-                />
+                android:value=".DictionaryMain" />
         </activity>
         <activity
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Main3Activity"></activity>
+        <activity android:name=".Main3Activity" />
+        <activity android:name=".ShowPopUpWindow"></activity>
     </application>
 
 </manifest>

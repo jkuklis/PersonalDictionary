@@ -1,3 +1,4 @@
+package com.example.jkuklis.personaldictionary;
 
 public class Dictionary {
 

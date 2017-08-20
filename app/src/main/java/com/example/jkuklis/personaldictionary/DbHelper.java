@@ -1,3 +1,5 @@
+package com.example.jkuklis.personaldictionary;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -386,6 +388,12 @@ public class DbHelper extends SQLiteOpenHelper {
         }
 
         deleteDict(dictId);
+    }
+
+    public void closeDB() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        if (db != null && db.isOpen())
+            db.close();
     }
 
     // no database updating yet

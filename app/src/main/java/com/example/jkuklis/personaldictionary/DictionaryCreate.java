@@ -1,7 +1,10 @@
 package com.example.jkuklis.personaldictionary;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,9 +14,15 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.api.OptionalPendingResult;
 
 import java.util.ArrayList;
 
@@ -270,7 +279,42 @@ public class DictionaryCreate extends AppCompatActivity implements
         boolean requirements = check_requirements();
 
         if (requirements) {
+            //Intent I = new Intent(this, ShowPopUpWindow.class);
+            //startActivity(I);
 
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(DictionaryCreate.this);
+
+            alertDialog.setTitle("Name your dictionary");
+
+            final EditText input = new EditText(DictionaryCreate.this);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT);
+            input.setLayoutParams(lp);
+            alertDialog.setView(input);
+
+            alertDialog.setPositiveButton("Approve", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog,int which) {
+                    DbHelper db = new DbHelper(getApplicationContext());
+
+                    OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(MainActivity.getGoogleApi());
+                    if (opr.isDone()) {
+                        GoogleSignInResult result = opr.get();
+                        GoogleSignInAccount acct = result.getSignInAccount();
+
+                        Dictionary dict = new Dictionary(input.getText().toString(), acct.getIdToken());
+
+                        Intent intent = new Intent(DictionaryCreate.this, DictionaryMain.class);
+                        startActivity(intent);
+
+                    } else {
+                        warning.setText("Failed to connect!");
+                        warning.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+
+            alertDialog.show();
 
         } else {
             warning.setText(REQUIREMENTS);

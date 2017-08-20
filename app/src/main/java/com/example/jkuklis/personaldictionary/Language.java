@@ -1,3 +1,5 @@
+package com.example.jkuklis.personaldictionary;
+
 public class Language {
 
     private int id;
