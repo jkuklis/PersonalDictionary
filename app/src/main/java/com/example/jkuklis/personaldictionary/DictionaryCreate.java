@@ -23,10 +23,16 @@ public class DictionaryCreate extends AppCompatActivity implements
         View.OnClickListener {
     private final String LANG_LOWER_LIMIT = "Min 1 language!";
     private final String LANG_UPPER_LIMIT = "Max 5 languages!";
+    private final String REQUIREMENTS = "Fill all the fields!";
 
     private MyListAdapter adapter;
 
+    private TextView warning;
+
     private String[] arrTemp;
+
+    private ArrayList<Language> languages = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -44,15 +50,24 @@ public class DictionaryCreate extends AppCompatActivity implements
                 adapter.add_language();
             }
         });
+
+        warning = (TextView) findViewById(R.id.warningPlaceholder);
+
+        Button createBtn = (Button) findViewById(R.id.createDictionary);
+        createBtn.setOnClickListener(this);
     }
 
     private class Language {
-        private String name;
-        private String abbr;
+        private String name = "";
+        private String abbr = "";
 
         Language(String name, String abbr) {
             this.name = name;
             this.abbr = abbr;
+        }
+
+        Language() {
+
         }
 
         public void setName(String name) {
@@ -73,8 +88,6 @@ public class DictionaryCreate extends AppCompatActivity implements
     }
 
     private class MyListAdapter extends BaseAdapter implements ListAdapter {
-        private ArrayList<Language> languages = new ArrayList<>();
-
         public MyListAdapter() {
             super();
             languages.add(new Language("", ""));
@@ -166,7 +179,6 @@ public class DictionaryCreate extends AppCompatActivity implements
             holder.lang_name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
-                    TextView warning = (TextView) findViewById(R.id.warningPlaceholder);
                     warning.setVisibility(View.INVISIBLE);
                 }
             });
@@ -199,7 +211,6 @@ public class DictionaryCreate extends AppCompatActivity implements
             holder.lang_abbr.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
-                    TextView warning = (TextView) findViewById(R.id.warningPlaceholder);
                     warning.setVisibility(View.INVISIBLE);
                 }
             });
@@ -220,14 +231,13 @@ public class DictionaryCreate extends AppCompatActivity implements
                 for (int i = 0; i < languages.size(); i++) {
                 }
 
-                languages.add(new Language("", ""));
+                languages.add(new Language());
 
                 this.notifyDataSetChanged();
             } else {
 
-                TextView warning = (TextView) findViewById(R.id.warningPlaceholder);
-                warning.setVisibility(View.VISIBLE);
                 warning.setText(LANG_UPPER_LIMIT);
+                warning.setVisibility(View.VISIBLE);
             }
         }
 
@@ -236,24 +246,46 @@ public class DictionaryCreate extends AppCompatActivity implements
 
                 languages.remove(position);
 
-                TextView warning = (TextView) findViewById(R.id.warningPlaceholder);
                 warning.setVisibility(View.INVISIBLE);
 
                 this.notifyDataSetChanged();
             } else {
-                TextView warning = (TextView) findViewById(R.id.warningPlaceholder);
-                warning.setVisibility(View.VISIBLE);
                 warning.setText(LANG_LOWER_LIMIT);
+                warning.setVisibility(View.VISIBLE);
 
             }
         }
+    }
+
+    private boolean check_requirements() {
+        for (int i = 0; i < languages.size(); i++) {
+            Language lang = languages.get(i);
+            if (lang.getAbbr().equals("") || lang.getName().equals("")) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void create_language() {
+
+        boolean requirements = check_requirements();
+
+        if (requirements) {
 
 
+        } else {
+            warning.setText(REQUIREMENTS);
+            warning.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.createDictionary:
+                create_language();
+                break;
         }
     }
 }
