@@ -1,6 +1,5 @@
 package com.example.jkuklis.personaldictionary;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +16,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class DictionaryCreate extends AppCompatActivity implements
         View.OnClickListener {
@@ -31,7 +29,7 @@ public class DictionaryCreate extends AppCompatActivity implements
 
     private String[] arrTemp;
 
-    private ArrayList<Language> languages = new ArrayList<>();
+    private ArrayList<LanguageBuilder> languages = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,16 +55,16 @@ public class DictionaryCreate extends AppCompatActivity implements
         createBtn.setOnClickListener(this);
     }
 
-    private class Language {
+    private class LanguageBuilder {
         private String name = "";
         private String abbr = "";
 
-        Language(String name, String abbr) {
+        LanguageBuilder(String name, String abbr) {
             this.name = name;
             this.abbr = abbr;
         }
 
-        Language() {
+        LanguageBuilder() {
 
         }
 
@@ -90,8 +88,8 @@ public class DictionaryCreate extends AppCompatActivity implements
     private class MyListAdapter extends BaseAdapter implements ListAdapter {
         public MyListAdapter() {
             super();
-            languages.add(new Language("", ""));
-            languages.add(new Language("", ""));
+            languages.add(new LanguageBuilder("", ""));
+            languages.add(new LanguageBuilder("", ""));
         }
 
         @Override
@@ -231,7 +229,7 @@ public class DictionaryCreate extends AppCompatActivity implements
                 for (int i = 0; i < languages.size(); i++) {
                 }
 
-                languages.add(new Language());
+                languages.add(new LanguageBuilder());
 
                 this.notifyDataSetChanged();
             } else {
@@ -259,7 +257,7 @@ public class DictionaryCreate extends AppCompatActivity implements
 
     private boolean check_requirements() {
         for (int i = 0; i < languages.size(); i++) {
-            Language lang = languages.get(i);
+            LanguageBuilder lang = languages.get(i);
             if (lang.getAbbr().equals("") || lang.getName().equals("")) {
                 return false;
             }
