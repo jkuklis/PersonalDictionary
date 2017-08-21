@@ -31,6 +31,8 @@ public class DictionaryCreate extends AppCompatActivity implements
     private final String LANG_LOWER_LIMIT = "Min 1 language!";
     private final String LANG_UPPER_LIMIT = "Max 5 languages!";
     private final String REQUIREMENTS = "Fill all the fields!";
+    private final String CONNECTION_FAIL = "Failed to connect";
+    private final String DB_NAME_EMPTY = "Database name empty!";
 
     private MyListAdapter adapter;
 
@@ -291,26 +293,46 @@ public class DictionaryCreate extends AppCompatActivity implements
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.MATCH_PARENT);
             input.setLayoutParams(lp);
+
+//            final TextView dbName_warning = new TextView(DictionaryCreate.this);
+//            dbName_warning.setText(WARNING_PLACEHOLDER);
+//            dbName_warning.setVisibility(View.INVISIBLE);
+
             alertDialog.setView(input);
 
             alertDialog.setPositiveButton("Approve", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog,int which) {
-                    DbHelper db = new DbHelper(getApplicationContext());
+                    String dbName = input.getText().toString();
 
-                    OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(MainActivity.getGoogleApi());
-                    if (opr.isDone()) {
-                        GoogleSignInResult result = opr.get();
-                        GoogleSignInAccount acct = result.getSignInAccount();
+                    if (dbName.equals("")) {
 
-                        Dictionary dict = new Dictionary(input.getText().toString(), acct.getIdToken());
-
-                        Intent intent = new Intent(DictionaryCreate.this, DictionaryMain.class);
-                        startActivity(intent);
+                        warning.setText(DB_NAME_EMPTY);
+                        warning.setVisibility(View.VISIBLE);
 
                     } else {
-                        warning.setText("Failed to connect!");
-                        warning.setVisibility(View.VISIBLE);
+
+                        DbHelper db = new DbHelper(getApplicationContext());
+
+                        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(MainActivity.getGoogleApi());
+                        if (opr.isDone()) {
+                            GoogleSignInResult result = opr.get();
+                            GoogleSignInAccount acct = result.getSignInAccount();
+
+                            Dictionary dict = new Dictionary(dbName, acct.getId());
+
+                            warning.setText(acct.getId());
+                            warning.setVisibility(View.VISIBLE);
+
+                            //Intent intent = new Intent(DictionaryCreate.this, DictionaryMain.class);
+                            //startActivity(intent);
+
+                        } else {
+                            warning.setText(CONNECTION_FAIL);
+                            warning.setVisibility(View.VISIBLE);
+                        }
+
                     }
+
                 }
             });
 
