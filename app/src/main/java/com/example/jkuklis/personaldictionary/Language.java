@@ -27,6 +27,12 @@ public class Language {
         this.name = name;
     }
 
+    public Language(int no, String abbr, String name) {
+        this.no = no;
+        this.abbr = abbr;
+        this.name = name;
+    }
+
     public void setId(int id) {
         this.id = id;
     }

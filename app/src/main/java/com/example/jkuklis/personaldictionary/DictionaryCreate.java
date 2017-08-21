@@ -25,6 +25,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.OptionalPendingResult;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DictionaryCreate extends AppCompatActivity implements
         View.OnClickListener {
@@ -310,21 +311,39 @@ public class DictionaryCreate extends AppCompatActivity implements
                         warning.setVisibility(View.VISIBLE);
 
                     } else {
-
-                        DbHelper db = new DbHelper(getApplicationContext());
-
                         OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(MainActivity.getGoogleApi());
                         if (opr.isDone()) {
                             GoogleSignInResult result = opr.get();
                             GoogleSignInAccount acct = result.getSignInAccount();
 
+                            List<Language> langs_inserted = new ArrayList<Language>();
+                            DbHelper db = new DbHelper(getApplicationContext());
+
                             Dictionary dict = new Dictionary(dbName, acct.getId());
 
-                            warning.setText(acct.getId());
+                            int dictId = (int) db.createDictionary(dict);
+
+                            List<Language> langs = new ArrayList<Language>();
+
+                            for (int i = 0; i < languages.size(); i++) {
+                                LanguageBuilder langBuilder = languages.get(i);
+                                Language lang = new Language(i, langBuilder.getAbbr(), langBuilder.getName());
+                                langs.add(lang);
+                            }
+
+                            for (Language lang : langs) {
+                                lang.setDictId(dictId);
+                                db.createLanguage(lang);
+                            }
+
+                            langs_inserted = db.getDictLanguages(dictId);
+
+//                            warning.setText(String.valueOf(langs_inserted.size()));
+                            warning.setText(String.valueOf(dictId));
                             warning.setVisibility(View.VISIBLE);
 
-                            //Intent intent = new Intent(DictionaryCreate.this, DictionaryMain.class);
-                            //startActivity(intent);
+//                            Intent intent = new Intent(DictionaryCreate.this, DictionaryMain.class);
+//                            startActivity(intent);
 
                         } else {
                             warning.setText(CONNECTION_FAIL);
