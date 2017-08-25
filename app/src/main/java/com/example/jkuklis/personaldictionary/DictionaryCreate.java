@@ -34,6 +34,7 @@ public class DictionaryCreate extends AppCompatActivity implements
     private final String REQUIREMENTS = "Fill all the fields!";
     private final String CONNECTION_FAIL = "Failed to connect";
     private final String DB_NAME_EMPTY = "Database name empty!";
+    private final String DICT_ID = "-1";
 
     private MyListAdapter adapter;
 
@@ -317,9 +318,13 @@ public class DictionaryCreate extends AppCompatActivity implements
                             GoogleSignInAccount acct = result.getSignInAccount();
 
                             List<Language> langs_inserted = new ArrayList<Language>();
+
                             DbHelper db = new DbHelper(getApplicationContext());
 
-                            Dictionary dict = new Dictionary(dbName, acct.getId());
+                            warning.setText(String.valueOf(db.getReadableDatabase()));
+                            warning.setVisibility(View.VISIBLE);
+
+                            Dictionary dict = new Dictionary(7, dbName, acct.getId());
 
                             int dictId = (int) db.createDictionary(dict);
 
@@ -338,12 +343,14 @@ public class DictionaryCreate extends AppCompatActivity implements
 
                             langs_inserted = db.getDictLanguages(dictId);
 
-//                            warning.setText(String.valueOf(langs_inserted.size()));
+                            warning.setText(String.valueOf(langs_inserted.size()));
                             warning.setText(String.valueOf(dictId));
-                            warning.setVisibility(View.VISIBLE);
+//                            warning.setVisibility(View.VISIBLE);
 
-//                            Intent intent = new Intent(DictionaryCreate.this, DictionaryMain.class);
-//                            startActivity(intent);
+                            Intent intent = new Intent(DictionaryCreate.this, DictionaryShow.class);
+                            intent.putExtra(DICT_ID, String.valueOf(dictId));
+
+                            startActivity(intent);
 
                         } else {
                             warning.setText(CONNECTION_FAIL);

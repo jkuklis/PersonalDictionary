@@ -1,10 +1,12 @@
 package com.example.jkuklis.personaldictionary;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +14,7 @@ import java.util.List;
 
 public class DbHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "LanguageList.db";
+    private static final String DATABASE_NAME = "Dictionaries.db";
 
     private static final String TABLE_DICTIONARIES = "dictionaries";
     private static final String TABLE_LANGUAGES = "languages";
@@ -21,6 +23,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     private static final String DICT_ID = "dict_id";
     private static final String DICT_NAME = "dict_name";
+    private static final String DICT_OWNER = "dict_owner";
 
     private static final String LANG_ID = "lang_id";
     private static final String LANG_DICT_ID = "lang_dict_id";
@@ -37,25 +40,27 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final String WORD_POS = "word_pos";
     private static final String WORD_STRING = "word_string";
 
+//    private Context context;
 
     private static final String CREATE_DICTIONARIES_TABLE = "CREATE TABLE " + TABLE_DICTIONARIES + "("
-            + DICT_ID + " INTEGER PRIMARY KEY, "
-            + DICT_NAME + " TEXT" + ")";
+            + DICT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+            + DICT_NAME + " TEXT, "
+            + DICT_OWNER + " TEXT" + ")";
 
     private static final String CREATE_LANGUAGES_TABLE = "CREATE TABLE " + TABLE_LANGUAGES + "("
-            + LANG_ID + " INTEGER PRIMARY KEY, "
+            + LANG_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
             + LANG_DICT_ID + " INTEGER NOT NULL, "
             + LANG_NO + " INTEGER NOT NULL, "
             + LANG_ABBR + " TEXT, "
             + LANG_NAME + " TEXT" + ")";
 
     private static final String CREATE_ENTRIES_TABLE = "CREATE TABLE " + TABLE_ENTRIES + "("
-            + ENTRY_ID + " INTEGER PRIMARY KEY, "
+            + ENTRY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
             + ENTRY_DICT_ID + " INTEGER NOT NULL, "
             + ENTRY_POS + " INTEGER NOT NULL" + ")";
 
     private static final String CREATE_WORDS_TABLE = "CREATE TABLE " + TABLE_WORDS + "("
-            + WORD_ID + " INTEGER PRIMARY KEY, "
+            + WORD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
             + WORD_ENTRY_ID + " INTEGER NOT NULL, "
             + WORD_POS + "INTEGER NOT NULL, "
             + WORD_STRING + " TEXT" + ")";
@@ -63,10 +68,14 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+//        this.context = context;
+//        TextView warning = (TextView) ((Activity)context).findViewById(R.id.warningPlaceholder);
+//        warning.setText("ayyoo whats poppin");
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
         db.execSQL(CREATE_DICTIONARIES_TABLE);
         db.execSQL(CREATE_LANGUAGES_TABLE);
         db.execSQL(CREATE_ENTRIES_TABLE);
@@ -87,8 +96,8 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(DICT_ID, dict.getId());
         values.put(DICT_NAME, dict.getName());
+        values.put(DICT_OWNER, dict.getOwner());
 
         long dict_id = db.insert(TABLE_DICTIONARIES, null, values);
 
@@ -99,7 +108,6 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(LANG_ID, lang.getId());
         values.put(LANG_DICT_ID, lang.getDictId());
         values.put(LANG_NO, lang.getNo());
         values.put(LANG_ABBR, lang.getAbbr());
@@ -114,7 +122,6 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(ENTRY_ID, entry.getId());
         values.put(ENTRY_DICT_ID, entry.getDictId());
         values.put(ENTRY_POS, entry.getPos());
 
@@ -127,7 +134,6 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(WORD_ID, word.getId());
         values.put(WORD_ENTRY_ID, word.getEntryId());
         values.put(WORD_POS, word.getPos());
         values.put(WORD_STRING, word.getString());
@@ -154,6 +160,7 @@ public class DbHelper extends SQLiteOpenHelper {
             c.moveToFirst();
             dict.setId(c.getInt(c.getColumnIndex(DICT_ID)));
             dict.setName(c.getString(c.getColumnIndex(DICT_NAME)));
+            dict.setOwner(c.getString(c.getColumnIndex(DICT_OWNER)));
         } else {
             // throw
         }
@@ -230,6 +237,55 @@ public class DbHelper extends SQLiteOpenHelper {
         return word;
     }
 
+    public List<Dictionary> getDicts() {
+        List<Dictionary> dicts = new ArrayList<Dictionary>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_DICTIONARIES;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c.moveToFirst()) {
+            do {
+                Dictionary dict = new Dictionary();
+                dict.setId(c.getInt(c.getColumnIndex(DICT_ID)));
+                dict.setName(c.getString(c.getColumnIndex(DICT_NAME)));
+                dict.setOwner(c.getString(c.getColumnIndex(DICT_OWNER)));
+
+                dicts.add(dict);
+
+            } while (c.moveToNext());
+
+        }
+
+        return dicts;
+    }
+
+    public List<Dictionary> getDictsOwned(String owner) {
+        List<Dictionary> dicts = new ArrayList<Dictionary>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_DICTIONARIES + " WHERE "
+                + DICT_OWNER + " = '" + owner + "'";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c.moveToFirst()) {
+            do {
+                Dictionary dict = new Dictionary();
+                dict.setId(c.getInt(c.getColumnIndex(DICT_ID)));
+                dict.setName(c.getString(c.getColumnIndex(DICT_NAME)));
+                dict.setOwner(c.getString(c.getColumnIndex(DICT_OWNER)));
+
+                dicts.add(dict);
+
+            } while (c.moveToNext());
+
+        }
+
+        return dicts;
+    }
+
     public List<Language> getDictLanguages(long dictId) {
         List<Language> langs = new ArrayList<Language>();
 
@@ -291,7 +347,32 @@ public class DbHelper extends SQLiteOpenHelper {
         if (c.moveToFirst()) {
             do {
                 Entry entry = new Entry(0, 0, 0);
-                c.moveToFirst();
+                entry.setId(c.getInt(c.getColumnIndex(ENTRY_ID)));
+                entry.setDictId(c.getInt(c.getColumnIndex(ENTRY_DICT_ID)));
+                entry.setPos(c.getInt(c.getColumnIndex(ENTRY_POS)));
+
+                entries.add(entry);
+
+            } while (c.moveToNext());
+
+        }
+
+        return entries;
+    }
+
+    public List<Entry> getDictEntriesSorted(long dictId) {
+        List<Entry> entries = new ArrayList<Entry>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_ENTRIES + " WHERE "
+                + ENTRY_DICT_ID + " = " + dictId
+                + " ORDER BY " + ENTRY_POS;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c.moveToFirst()) {
+            do {
+                Entry entry = new Entry(0, 0, 0);
                 entry.setId(c.getInt(c.getColumnIndex(ENTRY_ID)));
                 entry.setDictId(c.getInt(c.getColumnIndex(ENTRY_DICT_ID)));
                 entry.setPos(c.getInt(c.getColumnIndex(ENTRY_POS)));

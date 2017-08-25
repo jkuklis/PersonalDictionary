@@ -18,18 +18,19 @@ import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DictionaryMain extends AppCompatActivity implements
         View.OnClickListener
     {
 
-    public static final String POSITION_INFO = "Position placeholder";
-    public static final String ID_INFO = "ID placeholder";
+    public static final String DICT_ID = "-1";
 
     private static final String auth_fail = "STRANGE: Failed to authorize";
     private TextView mStatusTextView;
 
     private ArrayList<String> dictionaries = new ArrayList<>();
+    private List<Dictionary> dicts = new ArrayList<Dictionary>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,18 +42,25 @@ public class DictionaryMain extends AppCompatActivity implements
 
         mStatusTextView = (TextView) findViewById(R.id.login_info);
 
-        dictionaries.add("pl-en");
-        dictionaries.add("pl-de");
-        dictionaries.add("pl-de");
-        dictionaries.add("pl-de");
-        dictionaries.add("pl-de");
-        dictionaries.add("pl-de");
-        dictionaries.add("pl-de");
-        dictionaries.add("pl-de");
-        dictionaries.add("pl-de");
-        dictionaries.add("pl-de");
-        dictionaries.add("pl-de");
-        dictionaries.add("pl-de");
+        DbHelper db = new DbHelper(getApplicationContext());
+
+        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(MainActivity.getGoogleApi());
+        if (opr.isDone()) {
+            GoogleSignInResult result = opr.get();
+            GoogleSignInAccount acct = result.getSignInAccount();
+//            TextView warn = (TextView) findViewById(R.id.dict_list);
+//            warn.setText(acct.getId());
+            dicts = db.getDictsOwned(acct.getId());
+        } else {
+            finish();
+        }
+
+        for (Dictionary dict : dicts) {
+            dictionaries.add(dict.getName() + " " + dict.getOwner());
+        }
+//
+//        dictionaries.add("pl-en");
+//        dictionaries.add("pl-de");
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, dictionaries);
         ListView listView = (ListView) findViewById(R.id.dict_list_view);
@@ -110,8 +118,7 @@ public class DictionaryMain extends AppCompatActivity implements
         OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(MainActivity.getGoogleApi());
         if (opr.isDone()) {
             Intent intent = new Intent(this, DictionaryShow.class);
-            intent.putExtra(POSITION_INFO, String.valueOf(position));
-            intent.putExtra(ID_INFO, String.valueOf(id));
+            intent.putExtra(DICT_ID, String.valueOf(dicts.get(position).getId()));
             startActivity(intent);
         } else {
             finish();

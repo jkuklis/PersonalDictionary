@@ -59,7 +59,9 @@
             android:label="@string/title_activity_main2"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Main3Activity" />
-        <activity android:name=".ShowPopUpWindow"></activity>
+        <activity android:name=".ShowPopUpWindow" />
+        <activity android:name=".DictionaryAddWord" />
+        <activity android:name=".DictionaryAddEntry"></activity>
     </application>
 
 </manifest>
