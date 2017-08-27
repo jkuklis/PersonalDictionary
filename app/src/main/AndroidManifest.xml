@@ -35,7 +35,7 @@
         <activity
             android:name=".DictionaryCreate"
             android:parentActivityName=".DictionaryMain"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".DictionaryMain" />
@@ -49,7 +49,8 @@
         </activity>
         <activity
             android:name=".DictionaryShow"
-            android:parentActivityName=".DictionaryMain">
+            android:parentActivityName=".DictionaryMain"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".DictionaryMain" />
