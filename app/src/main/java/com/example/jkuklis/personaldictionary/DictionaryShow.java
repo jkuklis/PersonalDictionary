@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,9 +49,11 @@ public class DictionaryShow extends AppCompatActivity {
         ColumnValues cv1 = new ColumnValues();
         cv1.columns.add("ads");
         cv1.columns.add("va");
+        cv1.columns.add("ads");
+        cv1.columns.add("va");
         toDisplay.add(cv1);
 
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 20; i++) {
             ColumnValues cv2 = new ColumnValues();
             cv2.columns.add("awdaca");
             cv2.columns.add("acz");
@@ -59,7 +63,7 @@ public class DictionaryShow extends AppCompatActivity {
         }
 
         ListView listView = (ListView) findViewById(R.id.listview);
-        listView.setAdapter(new EntriesAdapter2(DictionaryShow.this, toDisplay));
+        listView.setAdapter(new EntriesAdapter(DictionaryShow.this, toDisplay));
 
         // need column view
         // button to edit
@@ -96,15 +100,28 @@ public class DictionaryShow extends AppCompatActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder = null;
             if (convertView == null) {
-                LayoutInflater inflater = DictionaryShow.this.getLayoutInflater();
-                convertView = inflater.inflate(R.layout.lin_layout, null);
-                holder.layout = (LinearLayout) convertView.findViewById(R.id.layout);
-
+                convertView = new LinearLayout(DictionaryShow.this);
+//                LayoutInflater inflater = DictionaryShow.this.getLayoutInflater();
+//                convertView = inflater.inflate(R.layout.lin_layout, null);
+//                holder.layout = (LinearLayout) convertView;
+//
+//                holder.layout = (LinearLayout) convertView;
+//                for (int i = 0; i < values.size(); i++) {
+//                    TextView textView = new TextView(DictionaryShow.this);
+//                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+//                            1500/values.size(), LinearLayout.LayoutParams.WRAP_CONTENT);
+//                    layoutParams.setMargins(20, 20, 20, 20);
+//                    textView.setLayoutParams(layoutParams);
+//
+//                    holder.layout.addView(textView);
+//                }
                 convertView.setTag(holder);
 
             } else {
                 holder = (ViewHolder)convertView.getTag();
             }
+
+            return convertView;
         }
 
         private class ViewHolder {
@@ -128,32 +145,59 @@ public class DictionaryShow extends AppCompatActivity {
 
             int numOfColumns = values.get(position).columns.size();
 
-            LinearLayout layout;
+            ViewHolder holder;
 
             if (convertView == null) {
+                holder = new ViewHolder();
                 convertView = new LinearLayout(activity);
 
-                layout = (LinearLayout) convertView;
-                for (int i = 0; i < numOfColumns; i++) {
-                    TextView textView = new TextView(activity);
-                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                            1500/numOfColumns, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    layoutParams.setMargins(20, 20, 20, 20);
-                    textView.setLayoutParams(layoutParams);
+                holder.layout = (LinearLayout) convertView;
+                convertView.setTag(holder);
 
-                    layout.addView(textView);
-                }
             } else {
-                convertView.getTag();
+                holder = (ViewHolder) convertView.getTag();
             }
 
-            layout = (LinearLayout) convertView;
+            for (int i = 0; i < numOfColumns; i++) {
+                TextView textView = new TextView(activity);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        1500/numOfColumns, LinearLayout.LayoutParams.WRAP_CONTENT);
+                layoutParams.setMargins(20, 20, 20, 20);
+                textView.setLayoutParams(layoutParams);
+
+                textView.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+
+                    }
+                });
+
+                holder.layout.addView(textView);
+            }
+
+            holder.layout = (LinearLayout) convertView;
 
             for (int i = 0; i < numOfColumns; i++) {
-                ((TextView) layout.getChildAt(i)).setText(values.get(position).columns.get(i));
+                ((TextView) holder.layout.getChildAt(i)).setText(values.get(position).columns.get(i));
+//                ((TextView) holder.layout.getChildAt(i)).setText(String.valueOf(position) + " " + String.valueOf(i));
+
             }
 
             return convertView;
+        }
+
+        private class ViewHolder {
+            LinearLayout layout;
         }
     }
 
