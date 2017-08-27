@@ -2,6 +2,7 @@ package com.example.jkuklis.personaldictionary;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -20,12 +22,19 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.jkuklis.personaldictionary.R.id.add;
+import static com.example.jkuklis.personaldictionary.R.id.language_abbreviation;
+import static com.example.jkuklis.personaldictionary.R.id.text;
+import static com.example.jkuklis.personaldictionary.R.id.textView;
+
 public class DictionaryShow extends AppCompatActivity {
 
     private int dictId;
     private List<Language> langs = new ArrayList<Language>();
     private List<Entry> entries = new ArrayList<Entry>();
+    DbHelper db;
 
+    public static final String DICT_ID = "-1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +47,39 @@ public class DictionaryShow extends AppCompatActivity {
 
         dictId = Integer.parseInt(dictIdString);
 
-        DbHelper db = new DbHelper(getApplicationContext());
+        db = new DbHelper(getApplicationContext());
 
         langs = db.getDictLanguages(dictId);
 
         entries = db.getDictEntriesSorted(dictId);
 
         List<ColumnValues> toDisplay = new ArrayList<ColumnValues>();
+
+        LinearLayout layout = (LinearLayout) findViewById(R.id.layout);
+        for (int i = 0; i < 4; i++) {
+            TextView textView = new TextView(DictionaryShow.this);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    1400/(4 + 1), LinearLayout.LayoutParams.WRAP_CONTENT);
+            layoutParams.setMargins(20, 20, 20, 20);
+            textView.setLayoutParams(layoutParams);
+            textView.setText("a");
+            final int j = i;
+            textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    languageInfo(j);
+                }
+            });
+            layout.addView(textView);
+        }
+
+        TextView textView = new TextView(DictionaryShow.this);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                1400/(4 + 1), LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(20, 20, 20, 20);
+        textView.setLayoutParams(layoutParams);
+        textView.setText("del");
+        layout.addView(textView);
 
         ColumnValues cv1 = new ColumnValues();
         cv1.columns.add("ads");
@@ -65,68 +100,27 @@ public class DictionaryShow extends AppCompatActivity {
         ListView listView = (ListView) findViewById(R.id.listview);
         listView.setAdapter(new EntriesAdapter(DictionaryShow.this, toDisplay));
 
-        // need column view
-        // button to edit
+        Button add_entries = (Button) findViewById(R.id.button3);
+        add_entries.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addEntries();
+            }
+        });
+    }
+
+    private void languageInfo(int i) {
+
+    }
+
+    private void addEntries() {
+        Intent intent = new Intent(this, DictionaryAddEntry.class);
+        intent.putExtra(DICT_ID, String.valueOf(dictId));
+        startActivity(intent);
     }
 
     private class ColumnValues {
         public List<String> columns = new ArrayList<>();
-    }
-
-    private class EntriesAdapter2 extends BaseAdapter {
-        private List<ColumnValues> values;
-
-        public EntriesAdapter2(Context context, List<ColumnValues> values) {
-            super();
-            this.values = values;
-        }
-
-        @Override
-        public int getCount() {
-            return values.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return values.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder = null;
-            if (convertView == null) {
-                convertView = new LinearLayout(DictionaryShow.this);
-//                LayoutInflater inflater = DictionaryShow.this.getLayoutInflater();
-//                convertView = inflater.inflate(R.layout.lin_layout, null);
-//                holder.layout = (LinearLayout) convertView;
-//
-//                holder.layout = (LinearLayout) convertView;
-//                for (int i = 0; i < values.size(); i++) {
-//                    TextView textView = new TextView(DictionaryShow.this);
-//                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-//                            1500/values.size(), LinearLayout.LayoutParams.WRAP_CONTENT);
-//                    layoutParams.setMargins(20, 20, 20, 20);
-//                    textView.setLayoutParams(layoutParams);
-//
-//                    holder.layout.addView(textView);
-//                }
-                convertView.setTag(holder);
-
-            } else {
-                holder = (ViewHolder)convertView.getTag();
-            }
-
-            return convertView;
-        }
-
-        private class ViewHolder {
-            LinearLayout layout;
-        }
     }
 
     private class EntriesAdapter extends ArrayAdapter<ColumnValues> {
@@ -141,7 +135,7 @@ public class DictionaryShow extends AppCompatActivity {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
 
             int numOfColumns = values.get(position).columns.size();
 
@@ -161,7 +155,7 @@ public class DictionaryShow extends AppCompatActivity {
             for (int i = 0; i < numOfColumns; i++) {
                 TextView textView = new TextView(activity);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                        1500/numOfColumns, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        1400/(numOfColumns + 1), LinearLayout.LayoutParams.WRAP_CONTENT);
                 layoutParams.setMargins(20, 20, 20, 20);
                 textView.setLayoutParams(layoutParams);
 
@@ -185,7 +179,22 @@ public class DictionaryShow extends AppCompatActivity {
                 holder.layout.addView(textView);
             }
 
-            holder.layout = (LinearLayout) convertView;
+//            holder.layout = (LinearLayout) convertView;
+
+
+            Button a = new Button(activity);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    80, 100);
+            layoutParams.setMargins(20, 20, 20, 20);
+            a.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteEntry(position);
+                }
+            });
+            a.setLayoutParams(layoutParams);
+            holder.layout.addView(a);
+
 
             for (int i = 0; i < numOfColumns; i++) {
                 ((TextView) holder.layout.getChildAt(i)).setText(values.get(position).columns.get(i));
@@ -194,6 +203,12 @@ public class DictionaryShow extends AppCompatActivity {
             }
 
             return convertView;
+        }
+
+        private void deleteEntry(int position) {
+            values.remove(position);
+            db.deleteEntry(entries.get(position).getId());
+            this.notifyDataSetChanged();
         }
 
         private class ViewHolder {

@@ -60,8 +60,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Main3Activity" />
         <activity android:name=".ShowPopUpWindow" />
-        <activity android:name=".DictionaryAddWord" />
-        <activity android:name=".DictionaryAddEntry"></activity>
+        <activity android:name=".DictionaryAddEntry" />
     </application>
 
 </manifest>

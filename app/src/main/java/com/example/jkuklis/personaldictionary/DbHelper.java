@@ -436,11 +436,9 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public void deleteEntry(long entryId) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_WORDS, WORD_ENTRY_ID + " = ?",
-                new String[] { String.valueOf(entryId)});
+        db.delete(TABLE_WORDS, WORD_ENTRY_ID + " = " + String.valueOf(entryId), null);
 
-        db.delete(TABLE_ENTRIES, ENTRY_ID + " = ?",
-                new String[] { String.valueOf(entryId)});
+        db.delete(TABLE_ENTRIES, ENTRY_ID + " = " + String.valueOf(entryId), null);
     }
 
     public void deleteLang(long langId) {
