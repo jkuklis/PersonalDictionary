@@ -16,10 +16,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.api.OptionalPendingResult;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -34,8 +33,11 @@ public class DictionaryShow extends AppCompatActivity
     implements View.OnClickListener {
     public static final String DICT_ID = "-1";
 
+    private String EXPORT_SUCCESS = "Export successful";
+    private String EXPORT_FAIL = "Export fail";
+
     private int dictId;
-    private List<Language> langs = new ArrayList<Language>();
+    private List<Language> languages = new ArrayList<Language>();
     private List<Entry> entries = new ArrayList<Entry>();
     private List<ColumnValues> values = new ArrayList<ColumnValues>();
     private DbHelper db;
@@ -43,6 +45,7 @@ public class DictionaryShow extends AppCompatActivity
     private EntriesAdapter adapter;
     private TextView header;
     private TextView status;
+    private String dictionaryName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +60,7 @@ public class DictionaryShow extends AppCompatActivity
 
         db = new DbHelper(getApplicationContext());
 
-        String dictionaryName = db.getDictionary(dictId).getName();
+        dictionaryName = db.getDictionary(dictId).getName();
 
         header = (TextView) findViewById(R.id.header);
         header.setText(dictionaryName);
@@ -65,11 +68,11 @@ public class DictionaryShow extends AppCompatActivity
         status = (TextView) findViewById(R.id.showStatus);
         status.setVisibility(View.INVISIBLE);
 
-        langs = db.getDictLanguages(dictId);
+        languages = db.getDictLanguages(dictId);
 
         entries = db.getDictEntriesSorted(dictId);
 
-        int columns = langs.size() + 1;
+        int columns = languages.size() + 1;
 
         LinearLayout layout = (LinearLayout) findViewById(R.id.tableHeaders);
         for (int i = 0; i < columns; i++) {
@@ -78,7 +81,7 @@ public class DictionaryShow extends AppCompatActivity
                     1400/(columns), LinearLayout.LayoutParams.WRAP_CONTENT);
             layoutParams.setMargins(20, 20, 20, 20);
             textView.setLayoutParams(layoutParams);
-            textView.setText(langs.get(i).getAbbr());
+            textView.setText(languages.get(i).getAbbr());
             final int j = i;
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -270,6 +273,31 @@ public class DictionaryShow extends AppCompatActivity
         alertDialog.setPositiveButton("Approve", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
 
+                JSONObject jObject = new JSONObject();
+                JSONArray jLanguages = new JSONArray();
+                JSONArray jAbbreviations = new JSONArray();
+                JSONArray jEntries = new JSONArray();
+
+                try {
+                    for (ColumnValues cv : values) {
+                        JSONArray jEntry = new JSONArray();
+                        for (int i = 0; i < languages.size(); i++) {
+                            jEntry.put(cv.get(i));
+                        }
+                        jEntries.put(jEntry);
+                    }
+
+                    jObject.put("name", dictionaryName);
+                    jObject.put("languages", jLanguages);
+                    jObject.put("abbreviations", jAbbreviations);
+                    jObject.put("entries", jEntries);
+
+                } catch(JSONException e) {
+                    status.setText(EXPORT_FAIL);
+                    status.setVisibility(View.VISIBLE);
+                    return;
+                }
+
                 try {
                     Writer output = null;
                     File file = new File("storage/sdcard/" + input.getText() + ".json");
@@ -288,9 +316,16 @@ public class DictionaryShow extends AppCompatActivity
         });
     }
 
+    void filterEntries() {
+        
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.filterButton:
+                filterEntries();
+                break;
             case R.id.addEntriesButton:
                 addEntries();
                 break;
