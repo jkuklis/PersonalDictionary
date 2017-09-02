@@ -131,12 +131,6 @@ public class DictionaryShow extends AppCompatActivity
         }
     }
 
-    private void addEntries() {
-        Intent intent = new Intent(this, DictionaryAddEntry.class);
-        intent.putExtra(DICT_ID, String.valueOf(dictId));
-        startActivity(intent);
-    }
-
     private class ColumnValues {
         public List<String> columns = new ArrayList<>();
         public int entryId;
@@ -231,6 +225,12 @@ public class DictionaryShow extends AppCompatActivity
         private class ViewHolder {
             LinearLayout layout;
         }
+    }
+
+    private void addEntries() {
+        Intent intent = new Intent(this, DictionaryAddEntry.class);
+        intent.putExtra(DICT_ID, String.valueOf(dictId));
+        startActivity(intent);
     }
 
     void deleteDictionary() {

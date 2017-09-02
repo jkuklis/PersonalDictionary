@@ -7,6 +7,7 @@
     tools:context="com.example.jkuklis.personaldictionary.DictionaryAddEntry">
 
     <LinearLayout
+        android:id="@+id/words"
         android:layout_width="163dp"
         android:layout_height="267dp"
         android:layout_marginRight="16dp"
@@ -14,26 +15,25 @@
         android:orientation="vertical"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="205dp"
-        android:id="@+id/words"></LinearLayout>
+        tools:layout_editor_absoluteX="205dp"/>
 
     <LinearLayout
+        android:id="@+id/languages"
         android:layout_width="167dp"
         android:layout_height="269dp"
         android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:id="@+id/abbreviations"></LinearLayout>
+        app:layout_constraintLeft_toLeftOf="parent"/>
 
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/addEntryButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="160dp"
-        android:text="Button"
+        android:text="@string/add_entries_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -42,23 +42,23 @@
         app:layout_constraintVertical_bias="0.993" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/goBackButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
+        android:text="@string/back_button"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
+        app:layout_constraintTop_toBottomOf="@+id/addEntryButton" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/addStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text="@string/add_status"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="21dp"
-        app:layout_constraintTop_toBottomOf="@+id/button4" />
+        app:layout_constraintTop_toBottomOf="@+id/goBackButton" />
 
 </android.support.constraint.ConstraintLayout>

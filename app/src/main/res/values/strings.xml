@@ -29,4 +29,6 @@
     <string name="export_button">Export</string>
     <string name="search">Search</string>
     <string name="search_status">Status</string>
+    <string name="add_status">Status</string>
+    <string name="back_button">Back</string>
 </resources>
