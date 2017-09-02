@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ public class DictionaryAddEntry extends AppCompatActivity implements
         setContentView(R.layout.activity_dictionary_add_entry);
 
         Intent intent = getIntent();
-        String dictIdString = intent.getStringExtra(DictionaryMain.DICT_ID);
+        String dictIdString = intent.getStringExtra(DictionariesList.DICT_ID);
         dictId = Integer.parseInt(dictIdString);
 
         LinearLayout rel1 = (LinearLayout) findViewById(R.id.abbreviations);

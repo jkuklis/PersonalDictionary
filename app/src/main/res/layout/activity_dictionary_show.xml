@@ -13,44 +13,44 @@
         android:layout_weight="0.20">
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/header"
             android:layout_width="147dp"
             android:layout_height="37dp"
-            android:layout_alignBottom="@+id/editText2"
+            android:layout_alignBottom="@+id/searchField"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_alignTop="@+id/editText2"
+            android:layout_alignTop="@+id/searchField"
             android:layout_marginLeft="5dp"
-            android:text="ayoowutspoppin"
+            android:text="@string/dictionary_placeholder"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.666" />
 
         <Button
-            android:id="@+id/button6"
+            android:id="@+id/filterButton"
             android:layout_width="81dp"
             android:layout_height="42dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="7dp"
-            android:text="Filter"
+            android:text="@string/filter_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/editText2"
+            android:id="@+id/searchField"
             android:layout_width="135dp"
             android:layout_height="35dp"
             android:layout_centerVertical="true"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="8dp"
-            android:layout_toRightOf="@+id/textView3"
+            android:layout_toRightOf="@+id/header"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Name"
+            android:text="@string/search"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.666"
@@ -61,62 +61,61 @@
     </android.support.constraint.ConstraintLayout>
 
     <LinearLayout
+        android:id="@+id/tableHeaders"
         android:layout_width="match_parent"
         android:layout_height="14dp"
-        android:id="@+id/layout"
         android:orientation="horizontal"
-        android:layout_weight="0.19"></LinearLayout>
+        android:layout_weight="0.14"></LinearLayout>
 
     <ListView
-        android:id="@+id/listview"
+        android:id="@+id/wordsList"
         android:layout_width="wrap_content"
         android:layout_height="331dp"
         android:visibility="visible"
-        android:layout_weight="0.41" />
+        android:layout_weight="0.11" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="41dp"
-        android:layout_weight="0.17">
+        android:layout_weight="0.42">
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/addEntriesButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="17dp"
-            android:layout_marginStart="17dp"
-            android:text="Button"
+            android:layout_marginLeft="25dp"
+            android:layout_marginStart="25dp"
+            android:text="@string/add_entries_button"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
         <Button
-            android:id="@+id/button7"
+            android:id="@+id/exportDictionaryButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Export"
+            android:text="@string/export_button"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true" />
 
         <Button
-            android:id="@+id/button8"
+            android:id="@+id/deleteDictionaryButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/delete_button"
+            android:layout_marginRight="28dp"
+            android:layout_marginEnd="28dp"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginEnd="31dp"
-            android:layout_marginRight="31dp"
-            android:text="Delete" />
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:id="@+id/showStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/search_status"
+            android:layout_alignParentTop="true" />
     </RelativeLayout>
 
 </LinearLayout>
-
-<!--<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-    <!--xmlns:tools="http://schemas.android.com/tools"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--tools:context="com.example.jkuklis.personaldictionary.DictionaryShow">-->
-
-<!--</android.support.constraint.ConstraintLayout>-->

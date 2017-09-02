@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.jkuklis.personaldictionary.MainActivity">
+    tools:context="com.example.jkuklis.personaldictionary.HelloScreen">
 
 
     <TextView
-        android:id="@+id/hello_message"
+        android:id="@+id/helloMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/hello_message"
@@ -27,22 +27,22 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="13dp"
-        app:layout_constraintTop_toBottomOf="@+id/hello_message"
+        app:layout_constraintTop_toBottomOf="@+id/helloMessage"
         app:layout_constraintHorizontal_bias="0.501" />
 
     <Button
-        android:id="@+id/sign_out_button"
+        android:id="@+id/signOutButton"
         android:layout_width="117dp"
         android:layout_height="53dp"
         android:text="@string/sign_out"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/sign_in_button"
+        app:layout_constraintTop_toBottomOf="@+id/signInButton"
         app:layout_constraintHorizontal_bias="0.501" />
 
     <Button
-        android:id="@+id/dictionary_jump"
+        android:id="@+id/dictionaryJump"
         android:layout_width="159dp"
         android:layout_height="52dp"
         android:layout_marginLeft="8dp"
@@ -50,7 +50,7 @@
         android:background="@color/button"
         android:text="@string/dict_main_jump"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sign_out_button"
+        app:layout_constraintTop_toBottomOf="@+id/signOutButton"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_bias="0.502" />
@@ -69,7 +69,7 @@
     -->
 
     <com.google.android.gms.common.SignInButton
-        android:id="@+id/sign_in_button"
+        android:id="@+id/signInButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="13dp"

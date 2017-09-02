@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.jkuklis.personaldictionary.DictionaryMain">
+    tools:context="com.example.jkuklis.personaldictionary.DictionariesList">
 
     <Button
-        android:id="@+id/create_dictionary"
+        android:id="@+id/createDictionaryButton"
         android:layout_width="153dp"
         android:layout_height="62dp"
         android:layout_marginRight="203dp"
@@ -22,7 +22,7 @@
         android:layout_marginEnd="203dp" />
 
     <Button
-        android:id="@+id/import_dictionary"
+        android:id="@+id/importDictionaryButton"
         android:layout_width="153dp"
         android:layout_height="62dp"
         android:text="@string/import_dict"
@@ -33,7 +33,7 @@
         android:layout_marginEnd="27dp" />
 
     <TextView
-        android:id="@+id/dict_list"
+        android:id="@+id/dictonariesListHeader"
         android:layout_width="213dp"
         android:layout_height="47dp"
         android:layout_marginTop="81dp"
@@ -62,7 +62,7 @@
         android:layout_marginEnd="8dp">
 
         <TextView
-            android:id="@+id/login_info"
+            android:id="@+id/loginInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -80,7 +80,7 @@
     </RelativeLayout>
 
     <ListView
-        android:id="@+id/dict_list_view"
+        android:id="@+id/dictonariesList"
         android:layout_width="296dp"
         android:layout_height="337dp"
         android:layout_marginBottom="16dp"
@@ -88,7 +88,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/dict_list"
+        app:layout_constraintTop_toBottomOf="@+id/dictonariesListHeader"
         app:layout_constraintVertical_bias="0.181" />
 
 

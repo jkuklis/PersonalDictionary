@@ -28,8 +28,8 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final String LANG_ID = "lang_id";
     private static final String LANG_DICT_ID = "lang_dict_id";
     private static final String LANG_NO = "lang_no";
-    private static final String LANG_ABBR = "lang_abbr";
-    private static final String LANG_NAME = "lang_name";
+    private static final String LANG_ABBR = "langAbbr";
+    private static final String LANG_NAME = "langName";
 
     private static final String ENTRY_ID = "entry_id";
     private static final String ENTRY_DICT_ID = "dict_id";
@@ -39,8 +39,6 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final String WORD_ENTRY_ID = "entry_id";
     private static final String WORD_POS = "word_pos";
     private static final String WORD_STRING = "word_string";
-
-//    private Context context;
 
     private static final String CREATE_DICTIONARIES_TABLE = "CREATE TABLE " + TABLE_DICTIONARIES + "("
             + DICT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
@@ -68,14 +66,10 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-//        this.context = context;
-//        TextView warning = (TextView) ((Activity)context).findViewById(R.id.warningPlaceholder);
-//        warning.setText("ayyoo whats poppin");
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
         db.execSQL(CREATE_DICTIONARIES_TABLE);
         db.execSQL(CREATE_LANGUAGES_TABLE);
         db.execSQL(CREATE_ENTRIES_TABLE);
@@ -152,8 +146,6 @@ public class DbHelper extends SQLiteOpenHelper {
         String selectQuery = "SELECT * FROM " + TABLE_DICTIONARIES + " WHERE "
                 + DICT_ID + " = " + dictId;
 
-        //Log.e(LOG, selectQuery);
-
         Cursor c = db.rawQuery(selectQuery, null);
 
         if (c != null) {
@@ -175,8 +167,6 @@ public class DbHelper extends SQLiteOpenHelper {
 
         String selectQuery = "SELECT * FROM " + TABLE_LANGUAGES + " WHERE "
                 + LANG_ID + " = " + langId;
-
-        //Log.e(LOG, selectQuery);
 
         Cursor c = db.rawQuery(selectQuery, null);
 

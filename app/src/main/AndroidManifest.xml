@@ -16,7 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".HelloScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,36 +24,36 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DictionaryMain"
-            android:parentActivityName=".MainActivity">
+            android:name=".DictionariesList"
+            android:parentActivityName=".HelloScreen">
 
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".HelloScreen" />
         </activity>
         <activity
             android:name=".DictionaryCreate"
-            android:parentActivityName=".DictionaryMain"
+            android:parentActivityName=".DictionariesList"
             android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".DictionaryMain" />
+                android:value=".DictionariesList" />
         </activity>
         <activity
             android:name=".DictionaryImport"
-            android:parentActivityName=".DictionaryMain">
+            android:parentActivityName=".DictionariesList">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".DictionaryMain" />
+                android:value=".DictionariesList" />
         </activity>
         <activity
             android:name=".DictionaryShow"
-            android:parentActivityName=".DictionaryMain"
+            android:parentActivityName=".DictionariesList"
             android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".DictionaryMain" />
+                android:value=".DictionariesList" />
         </activity>
         <activity
             android:name=".Main2Activity"

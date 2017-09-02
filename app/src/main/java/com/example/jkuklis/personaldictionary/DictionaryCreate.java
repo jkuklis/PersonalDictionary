@@ -36,21 +36,17 @@ public class DictionaryCreate extends AppCompatActivity implements
     private final String DB_NAME_EMPTY = "Database name empty!";
     private final String DICT_ID = "-1";
 
-    private MyListAdapter adapter;
-
+    //    private String[] arrTemp;
+    private List<LanguageBuilder> languages = new ArrayList<>();
+    private LanugageListAdapter adapter;
     private TextView warning;
-
-    private String[] arrTemp;
-
-    private ArrayList<LanguageBuilder> languages = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary_create);
 
-        adapter = new MyListAdapter();
+        adapter = new LanugageListAdapter();
 
         ListView listView = (ListView) findViewById(R.id.listViewMain);
         listView.setAdapter(adapter);
@@ -77,14 +73,11 @@ public class DictionaryCreate extends AppCompatActivity implements
             this.abbr = abbr;
         }
 
-        LanguageBuilder() {
-
-        }
+        LanguageBuilder() {}
 
         public void setName(String name) {
             this.name = name;
         }
-
         public void setAbbr(String abbr) {
             this.abbr = abbr;
         }
@@ -92,14 +85,13 @@ public class DictionaryCreate extends AppCompatActivity implements
         public String getName() {
             return this.name;
         }
-
         public String getAbbr() {
             return this.abbr;
         }
     }
 
-    private class MyListAdapter extends BaseAdapter implements ListAdapter {
-        public MyListAdapter() {
+    private class LanugageListAdapter extends BaseAdapter implements ListAdapter {
+        public LanugageListAdapter() {
             super();
             languages.add(new LanguageBuilder("", ""));
             languages.add(new LanguageBuilder("", ""));
@@ -107,7 +99,6 @@ public class DictionaryCreate extends AppCompatActivity implements
 
         @Override
         public int getCount() {
-            // TODO Auto-generated method stub
             if(languages != null && languages.size() != 0){
                 return languages.size();
             }
@@ -116,20 +107,18 @@ public class DictionaryCreate extends AppCompatActivity implements
 
         @Override
         public Object getItem(int position) {
-            // TODO Auto-generated method stub
             return languages.get(position);
         }
 
         @Override
         public long getItemId(int position) {
-            // TODO Auto-generated method stub
             return position;
         }
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
 
-            arrTemp = new String[languages.size()];
+//            arrTemp = new String[languages.size()];
 
             final ViewHolder holder;
             if (convertView == null) {
@@ -137,89 +126,68 @@ public class DictionaryCreate extends AppCompatActivity implements
                 holder = new ViewHolder();
                 LayoutInflater inflater = DictionaryCreate.this.getLayoutInflater();
                 convertView = inflater.inflate(R.layout.language_list_item, null);
-                holder.lang_name = (EditText) convertView.findViewById(R.id.language_name);
-                holder.lang_abbr = (EditText) convertView.findViewById(R.id.language_abbreviation);
-                holder.del_btn = (FloatingActionButton) convertView.findViewById(R.id.delete_language_button);
+                holder.langName = (EditText) convertView.findViewById(R.id.language_name);
+                holder.langAbbr = (EditText) convertView.findViewById(R.id.language_abbreviation);
+                holder.deleteBtn = (FloatingActionButton) convertView.findViewById(R.id.delete_language_button);
 
                 convertView.setTag(holder);
 
             } else {
-
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            holder.ref = position;
-
-            holder.del_btn.setOnClickListener(new View.OnClickListener() {
+            holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //MyListAdapter.this.delete_language(position);
                     delete_language(position);
                 }
             });
 
-            holder.lang_name.setText(languages.get(position).getName());
-            holder.lang_name.addTextChangedListener(new TextWatcher() {
+            holder.langName.setText(languages.get(position).getName());
+            holder.langName.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-                    //TextView txt = (TextView) findViewById(R.id.languageHeader);
-                    //txt.setText(String.valueOf(arg0) + " " + String.valueOf(arg1) + " " + String.valueOf(arg2) + " " + String.valueOf(arg3));
-
                     languages.get(position).setName(String.valueOf(arg0));
-                    //txt.setText(languages.get(position));
-                    // TODO Auto-generated method stub
-
                 }
 
                 @Override
                 public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
                                               int arg3) {
-                    // TODO Auto-generated method stub
-                    TextView warning = (TextView) findViewById(R.id.warningPlaceholder);
-                    warning.setVisibility(View.INVISIBLE);
-
+//                    warning.setVisibility(View.INVISIBLE);
                 }
 
                 @Override
                 public void afterTextChanged(Editable arg0) {
-                    // TODO Auto-generated method stub
-                    arrTemp[holder.ref] = arg0.toString();
+//                    arrTemp[holder.ref] = arg0.toString();
                 }
             });
 
-            holder.lang_name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            holder.langName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     warning.setVisibility(View.INVISIBLE);
                 }
             });
 
-            holder.lang_abbr.setText(languages.get(position).getAbbr());
-            holder.lang_abbr.addTextChangedListener(new TextWatcher() {
-
+            holder.langAbbr.setText(languages.get(position).getAbbr());
+            holder.langAbbr.addTextChangedListener(new TextWatcher() {
 
                 @Override
                 public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-
                     languages.get(position).setAbbr(String.valueOf(arg0));
-                    // TODO Auto-generated method stub
-
                 }
 
                 @Override
                 public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-                    // TODO Auto-generated method stub
-
                 }
 
                 @Override
                 public void afterTextChanged(Editable arg0) {
-                    // TODO Auto-generated method stub
-                    arrTemp[holder.ref] = arg0.toString();
+//                    arrTemp[holder.ref] = arg0.toString();
                 }
             });
 
-            holder.lang_abbr.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            holder.langAbbr.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     warning.setVisibility(View.INVISIBLE);
@@ -230,10 +198,9 @@ public class DictionaryCreate extends AppCompatActivity implements
         }
 
         private class ViewHolder {
-            EditText lang_name;
-            EditText lang_abbr;
-            FloatingActionButton del_btn;
-            int ref;
+            EditText langName;
+            EditText langAbbr;
+            FloatingActionButton deleteBtn;
         }
 
         public void add_language() {
@@ -254,12 +221,10 @@ public class DictionaryCreate extends AppCompatActivity implements
 
         public void delete_language(int position) {
             if (languages.size() > 1) {
-
                 languages.remove(position);
-
                 warning.setVisibility(View.INVISIBLE);
-
                 this.notifyDataSetChanged();
+
             } else {
                 warning.setText(LANG_LOWER_LIMIT);
                 warning.setVisibility(View.VISIBLE);
@@ -283,8 +248,6 @@ public class DictionaryCreate extends AppCompatActivity implements
         boolean requirements = check_requirements();
 
         if (requirements) {
-            //Intent I = new Intent(this, ShowPopUpWindow.class);
-            //startActivity(I);
 
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(DictionaryCreate.this);
 
@@ -295,10 +258,6 @@ public class DictionaryCreate extends AppCompatActivity implements
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.MATCH_PARENT);
             input.setLayoutParams(lp);
-
-//            final TextView dbName_warning = new TextView(DictionaryCreate.this);
-//            dbName_warning.setText(WARNING_PLACEHOLDER);
-//            dbName_warning.setVisibility(View.INVISIBLE);
 
             alertDialog.setView(input);
 
@@ -312,19 +271,13 @@ public class DictionaryCreate extends AppCompatActivity implements
                         warning.setVisibility(View.VISIBLE);
 
                     } else {
-                        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(MainActivity.getGoogleApi());
+                        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(HelloScreen.getGoogleApi());
                         if (opr.isDone()) {
                             GoogleSignInResult result = opr.get();
                             GoogleSignInAccount acct = result.getSignInAccount();
 
-                            List<Language> langs_inserted = new ArrayList<Language>();
-
                             DbHelper db = new DbHelper(getApplicationContext());
-
-                            warning.setText(String.valueOf(db.getReadableDatabase()));
-                            warning.setVisibility(View.VISIBLE);
-
-                            Dictionary dict = new Dictionary(7, dbName, acct.getId());
+                            Dictionary dict = new Dictionary(dbName, acct.getId());
 
                             int dictId = (int) db.createDictionary(dict);
 
@@ -341,12 +294,6 @@ public class DictionaryCreate extends AppCompatActivity implements
                                 db.createLanguage(lang);
                             }
 
-                            langs_inserted = db.getDictLanguages(dictId);
-
-                            warning.setText(String.valueOf(langs_inserted.size()));
-                            warning.setText(String.valueOf(dictId));
-//                            warning.setVisibility(View.VISIBLE);
-
                             Intent intent = new Intent(DictionaryCreate.this, DictionaryShow.class);
                             intent.putExtra(DICT_ID, String.valueOf(dictId));
 
@@ -358,7 +305,6 @@ public class DictionaryCreate extends AppCompatActivity implements
                         }
 
                     }
-
                 }
             });
 

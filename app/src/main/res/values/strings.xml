@@ -22,4 +22,11 @@
     <string name="title_activity_main2">Main2Activity</string>
     <string name="warning_placeholder">Warning placeholder</string>
     <string name="create_dictionary">Create</string>
+    <string name="dictionary_placeholder">Name placeholder</string>
+    <string name="filter_button">Filter</string>
+    <string name="add_entries_button">Add</string>
+    <string name="delete_button">Delete</string>
+    <string name="export_button">Export</string>
+    <string name="search">Search</string>
+    <string name="search_status">Status</string>
 </resources>
