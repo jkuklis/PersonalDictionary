@@ -1,6 +1,7 @@
 package com.example.jkuklis.personaldictionary;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +12,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.api.OptionalPendingResult;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,10 +31,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class DictionaryImport extends AppCompatActivity
     implements View.OnClickListener {
+
+    public String DICT_ID = "-1";
 
     private String URL_FAIL = "Failed to connect with URL!";
     private String JSON_FAIL = "Failed to parse JSON!";
@@ -73,6 +82,8 @@ public class DictionaryImport extends AppCompatActivity
         List<String> languages = new ArrayList<String>();
         List<String> abbreviations = new ArrayList<String>();
         List<ColumnValues> entries = new ArrayList<ColumnValues>();
+        DbHelper db = new DbHelper(this);
+        String owner = "0";
 
         try {
             JSONObject jObject = new JSONObject(result);
@@ -143,7 +154,40 @@ public class DictionaryImport extends AppCompatActivity
             return;
         }
 
-        
+        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(HelloScreen.getGoogleApi());
+        if (opr.isDone()) {
+            GoogleSignInResult googleResult = opr.get();
+            GoogleSignInAccount acct = googleResult.getSignInAccount();
+            owner = acct.getId();
+        } else {
+            finish();
+        }
+
+        Dictionary dict = new Dictionary(dictionaryName, owner);
+
+        int dictId = (int) db.createDictionary(dict);
+
+        for (int i = 0; i < languages.size(); i++) {
+            Language lang = new Language(dictId, i, languages.get(i), abbreviations.get(i));
+            db.createLanguage(lang);
+        }
+
+        for (int i = 0; i < entries.size(); i++) {
+            Entry entry = new Entry(dictId);
+            int entryId = (int) db.createEntry(entry);
+
+            ColumnValues cv = entries.get(i);
+            for (int j = 0; j < languages.size(); j++) {
+                String wordString = cv.get(j);
+                Word word = new Word(entryId, j, wordString);
+                db.createWord(word);
+            }
+        }
+
+        Intent intent = new Intent(this, DictionaryShow.class);
+        intent.putExtra(DICT_ID, String.valueOf(dictId));
+
+        startActivity(intent);
 
     }
 
@@ -152,6 +196,10 @@ public class DictionaryImport extends AppCompatActivity
 
         public void add(String value) {
             columns.add(value);
+        }
+
+        public String get(int position) {
+            return columns.get(position);
         }
     }
 

@@ -276,9 +276,12 @@ public class DictionaryShow extends AppCompatActivity
                     output = new BufferedWriter(new FileWriter(file));
                     output.write("TODO");
                     output.close();
-                    status.setText("Export successful");
+                    status.setText(EXPORT_SUCCESS);
+                    status.setVisibility(View.VISIBLE);
 
                 } catch (Exception e) {
+                    status.setText(EXPORT_FAIL);
+                    status.setVisibility(View.VISIBLE);
                 }
 
             }
@@ -293,6 +296,9 @@ public class DictionaryShow extends AppCompatActivity
                 break;
             case R.id.deleteDictionaryButton:
                 deleteDictionary();
+                break;
+            case R.id.exportDictionaryButton:
+                exportDictionary();
                 break;
         }
     }

@@ -12,7 +12,7 @@ public class Entry {
         this.dictId = dictId;
     }
 
-    public Entry(int id, int dictId, int pos) {
+    public Entry(int id, int dictId) {
         this.id = id;
         this.dictId = dictId;
     }
