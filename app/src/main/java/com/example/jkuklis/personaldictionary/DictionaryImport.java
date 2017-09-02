@@ -4,10 +4,17 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,32 +23,136 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.List;
 
-public class DictionaryImport extends AppCompatActivity {
+public class DictionaryImport extends AppCompatActivity
+    implements View.OnClickListener {
 
-    Button btnHit;
-    TextView txtJson;
-    ProgressDialog pd;
+    private String URL_FAIL = "Failed to connect with URL!";
+    private String JSON_FAIL = "Failed to parse JSON!";
+    private String NAME_FAIL = "Empty database name!";
+    private String LANGUAGES_MANY_FAIL = "More than 5 languages!";
+    private String LANGUAGES_FEW_FAIL = "Less than 1 language!";
+    private String ABBREVIATONS_COUNT_FAIL = "Languages and abbreviations counts do not match!";
+    private String LANGUAGES_EMPTY_FAIL = "Empty language!";
+    private String ABBREVIATIONS_EMPTY_FAIL = "Empty abbreviation!";
+    private String ENTRY_LENGTH_FAIL = "Entry length different than languages count!";
+
+    private EditText importPath;
+    private TextView status;
+
+    private ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary_import);
-        btnHit = (Button) findViewById(R.id.button5);
-        txtJson = (TextView) findViewById(R.id.importInfo);
 
-        btnHit.setOnClickListener(new View.OnClickListener() {
+        status = (TextView) findViewById(R.id.importStatus);
+        status.setVisibility(View.INVISIBLE);
+
+        importPath = (EditText) findViewById(R.id.importPath);
+        importPath.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                new JsonTask().execute("http://headers.jsontest.com/");
-            }
-        });
+            public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {}
 
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+                status.setVisibility(View.INVISIBLE);
+            }
+            @Override
+            public void afterTextChanged(Editable arg0) {}
+        });
 
     }
 
-    private void addDictionary(String s) {
+    private void addDictionary(String result) {
+        String dictionaryName;
+        List<String> languages = new ArrayList<String>();
+        List<String> abbreviations = new ArrayList<String>();
+        List<ColumnValues> entries = new ArrayList<ColumnValues>();
 
+        try {
+            JSONObject jObject = new JSONObject(result);
+            JSONArray jLanguages = jObject.getJSONArray("languages");
+            JSONArray jAbbreviations = jObject.getJSONArray("abbreviations");
+            JSONArray jEntries = jObject.getJSONArray("entries");
+
+            dictionaryName = jObject.getString("name");
+
+            if (dictionaryName.equals("")) {
+                status.setText(NAME_FAIL);
+                status.setVisibility(View.VISIBLE);
+                return;
+            }
+
+            if (jLanguages.length() < 1 || jLanguages.length() > 5) {
+                status.setText(jLanguages.length() > 5 ? LANGUAGES_MANY_FAIL : LANGUAGES_FEW_FAIL);
+                status.setVisibility(View.VISIBLE);
+                return;
+            }
+
+            if (jAbbreviations.length() != jLanguages.length()) {
+                status.setText(ABBREVIATONS_COUNT_FAIL);
+                status.setVisibility(View.VISIBLE);
+                return;
+            }
+
+
+            for (int i = 0; i < jLanguages.length(); i++) {
+                String lang = jLanguages.getString(i);
+                if (lang.equals("")) {
+                    status.setText(LANGUAGES_EMPTY_FAIL);
+                    status.setVisibility(View.VISIBLE);
+                    return;
+                }
+                languages.add(lang);
+            }
+
+            for (int i = 0; i < jAbbreviations.length(); i++) {
+                String abbr = jAbbreviations.getString(i);
+                if (abbr.equals("")) {
+                    status.setText(ABBREVIATIONS_EMPTY_FAIL);
+                    status.setVisibility(View.VISIBLE);
+                    return;
+                }
+                abbreviations.add(abbr);
+            }
+
+            for (int i = 0; i < jEntries.length(); i++) {
+                JSONArray jEntry = jEntries.getJSONArray(i);
+                if (jEntry.length() != jLanguages.length()) {
+                    status.setText(ENTRY_LENGTH_FAIL);
+                    status.setVisibility(View.VISIBLE);
+                    return;
+                }
+
+                ColumnValues cv = new ColumnValues();
+                for (int j = 0; j < jEntry.length(); j++) {
+                    cv.add(jEntry.getString(j));
+                }
+
+                entries.add(cv);
+            }
+
+        } catch (final JSONException e) {
+            status.setText(JSON_FAIL);
+            status.setVisibility(View.VISIBLE);
+            return;
+        }
+
+        
+
+    }
+
+    private class ColumnValues {
+        public List<String> columns = new ArrayList<>();
+
+        public void add(String value) {
+            columns.add(value);
+        }
     }
 
     private class JsonTask extends AsyncTask<String, String, String> {
@@ -76,17 +187,14 @@ public class DictionaryImport extends AppCompatActivity {
 
                 while ((line = reader.readLine()) != null) {
                     buffer.append(line+"\n");
-                    Log.d("Response: ", "> " + line);   //here u ll get whole response...... :-)
-
                 }
 
                 return buffer.toString();
 
-
             } catch (MalformedURLException e) {
-                e.printStackTrace();
+                reportUrl();
             } catch (IOException e) {
-                e.printStackTrace();
+                reportUrl();
             } finally {
                 if (connection != null) {
                     connection.disconnect();
@@ -102,6 +210,11 @@ public class DictionaryImport extends AppCompatActivity {
             return null;
         }
 
+        private void reportUrl() {
+            status.setText(URL_FAIL);
+            status.setVisibility(View.VISIBLE);
+        }
+
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
@@ -109,7 +222,16 @@ public class DictionaryImport extends AppCompatActivity {
                 pd.dismiss();
             }
             addDictionary(result);
-            txtJson.setText(result);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.importButton:
+                new JsonTask().execute(importPath.getText().toString());
+                //"http://headers.jsontest.com/"
+                break;
         }
     }
 }
