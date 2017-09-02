@@ -28,7 +28,7 @@ public class DictionaryImport extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary_import);
         btnHit = (Button) findViewById(R.id.button5);
-        txtJson = (TextView) findViewById(R.id.textView5);
+        txtJson = (TextView) findViewById(R.id.importInfo);
 
         btnHit.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -33,7 +33,6 @@ public class DbHelper extends SQLiteOpenHelper {
 
     private static final String ENTRY_ID = "entry_id";
     private static final String ENTRY_DICT_ID = "dict_id";
-    private static final String ENTRY_POS = "entry_pos";
 
     private static final String WORD_ID = "word_id";
     private static final String WORD_ENTRY_ID = "entry_id";
@@ -54,8 +53,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_ENTRIES_TABLE = "CREATE TABLE " + TABLE_ENTRIES + "("
             + ENTRY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
-            + ENTRY_DICT_ID + " INTEGER NOT NULL, "
-            + ENTRY_POS + " INTEGER NOT NULL" + ")";
+            + ENTRY_DICT_ID + " INTEGER NOT NULL, ";
 
     private static final String CREATE_WORDS_TABLE = "CREATE TABLE " + TABLE_WORDS + "("
             + WORD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
@@ -117,7 +115,6 @@ public class DbHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(ENTRY_DICT_ID, entry.getDictId());
-        values.put(ENTRY_POS, entry.getPos());
 
         long entry_id = db.insert(TABLE_LANGUAGES, null, values);
 
@@ -197,7 +194,6 @@ public class DbHelper extends SQLiteOpenHelper {
             c.moveToFirst();
             entry.setId(c.getInt(c.getColumnIndex(ENTRY_ID)));
             entry.setDictId(c.getInt(c.getColumnIndex(ENTRY_DICT_ID)));
-            entry.setPos(c.getInt(c.getColumnIndex(ENTRY_POS)));
         } else {
             // throw
         }
@@ -303,28 +299,6 @@ public class DbHelper extends SQLiteOpenHelper {
         return langs;
     }
 
-    public Entry getDictPosEntry(long dictId, int pos) {
-        Entry entry = new Entry(0, 0, 0);
-
-        String selectQuery = "SELECT * FROM " + TABLE_ENTRIES + " WHERE "
-                + ENTRY_DICT_ID + " = " + dictId + " AND "
-                + ENTRY_POS + " = " + pos;
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery(selectQuery, null);
-
-        if (c != null) {
-            c.moveToFirst();
-            entry.setId(c.getInt(c.getColumnIndex(ENTRY_ID)));
-            entry.setDictId(c.getInt(c.getColumnIndex(ENTRY_DICT_ID)));
-            entry.setPos(c.getInt(c.getColumnIndex(ENTRY_POS)));
-        } else {
-            // throw
-        }
-
-        return entry;
-    }
-
     public List<Entry> getDictEntries(long dictId) {
         List<Entry> entries = new ArrayList<Entry>();
 
@@ -339,7 +313,6 @@ public class DbHelper extends SQLiteOpenHelper {
                 Entry entry = new Entry(0, 0, 0);
                 entry.setId(c.getInt(c.getColumnIndex(ENTRY_ID)));
                 entry.setDictId(c.getInt(c.getColumnIndex(ENTRY_DICT_ID)));
-                entry.setPos(c.getInt(c.getColumnIndex(ENTRY_POS)));
 
                 entries.add(entry);
 
@@ -355,7 +328,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
         String selectQuery = "SELECT * FROM " + TABLE_ENTRIES + " WHERE "
                 + ENTRY_DICT_ID + " = " + dictId
-                + " ORDER BY " + ENTRY_POS;
+                + " ORDER BY " + DICT_ID;
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
@@ -365,7 +338,6 @@ public class DbHelper extends SQLiteOpenHelper {
                 Entry entry = new Entry(0, 0, 0);
                 entry.setId(c.getInt(c.getColumnIndex(ENTRY_ID)));
                 entry.setDictId(c.getInt(c.getColumnIndex(ENTRY_DICT_ID)));
-                entry.setPos(c.getInt(c.getColumnIndex(ENTRY_POS)));
 
                 entries.add(entry);
 
@@ -435,12 +407,6 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_LANGUAGES, LANG_ID + " = ?",
                 new String[] { String.valueOf(langId)});
-    }
-
-    public void deleteDictPosEntry(long dictId, int pos) {
-        Entry entry = getDictPosEntry(dictId, pos);
-
-        deleteEntry(entry.getId());
     }
 
     public void deleteDict(long dictId) {

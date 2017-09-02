@@ -20,8 +20,8 @@ public class DictionaryAddEntry extends AppCompatActivity implements
     private static final String REQUIREMENTS = "Please fill all word slots!";
     private static final String SUCCESS = "Entry added! Count: ";
 
-    private List<Language> langs = new ArrayList<Language>();
-    private List<String> newWords = new ArrayList<String>();
+    private List<Language> languages = new ArrayList<Language>();
+    private List<String> words = new ArrayList<String>();
     private TextView status;
     private int dictId;
     private int counter;
@@ -41,15 +41,15 @@ public class DictionaryAddEntry extends AppCompatActivity implements
         String dictIdString = intent.getStringExtra(DictionariesList.DICT_ID);
         dictId = Integer.parseInt(dictIdString);
 
-        LinearLayout languages = (LinearLayout) findViewById(R.id.languages);
-        LinearLayout words = (LinearLayout) findViewById(R.id.words);
+        LinearLayout languagesPanel = (LinearLayout) findViewById(R.id.languages);
+        LinearLayout wordsPanel = (LinearLayout) findViewById(R.id.words);
 
         db = new DbHelper(getApplicationContext());
 
-        langs = db.getDictLanguages(dictId);
+        languages = db.getDictLanguages(dictId);
 
-        for (int i = 0; i < langs.size(); i++) {
-            newWords.add("");
+        for (int i = 0; i < languages.size(); i++) {
+            words.add("");
 
             TextView lang = new TextView(this);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -57,8 +57,8 @@ public class DictionaryAddEntry extends AppCompatActivity implements
             layoutParams.setMargins(20, 20, 20, 20);
             lang.setLayoutParams(layoutParams);
 
-            lang.setText(langs.get(i).getName());
-            languages.addView(lang);
+            lang.setText(languages.get(i).getName());
+            languagesPanel.addView(lang);
 
             final EditText word = new EditText(this);
             word.setLayoutParams(layoutParams);
@@ -69,7 +69,7 @@ public class DictionaryAddEntry extends AppCompatActivity implements
 
                 @Override
                 public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-                    newWords.set(j, word.getText().toString());
+                    DictionaryAddEntry.this.words.set(j, word.getText().toString());
                 }
 
                 @Override
@@ -81,12 +81,12 @@ public class DictionaryAddEntry extends AppCompatActivity implements
                 public void afterTextChanged(Editable arg0) {}
             });
 
-            words.addView(word);
+            wordsPanel.addView(word);
         }
     }
 
     private boolean check_requirements() {
-        for (String word : newWords) {
+        for (String word : words) {
             if (word.equals("")) {
                 return false;
             }
@@ -96,10 +96,20 @@ public class DictionaryAddEntry extends AppCompatActivity implements
 
     private void addEntry() {
         if (!check_requirements()) {
-            Entry entry = new Entry(dictId, dictId);
+            Entry entry = new Entry(dictId);
 
+            int entryId = (int) db.createEntry(entry);
+
+            for (int i = 0; i < languages.size(); i++) {
+                Word word = new Word(entryId, i, words.get(i));
+                db.createWord(word);
+            }
 
             counter++;
+
+            status.setText(SUCCESS + String.valueOf(counter));
+            status.setVisibility(View.VISIBLE);
+
         } else {
             status.setText(REQUIREMENTS);
             status.setVisibility(View.VISIBLE);
