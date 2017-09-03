@@ -65,17 +65,6 @@ public class DictionaryImport extends AppCompatActivity
         status.setVisibility(View.INVISIBLE);
 
         importPath = (EditText) findViewById(R.id.importPath);
-        importPath.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {}
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-                status.setVisibility(View.INVISIBLE);
-            }
-            @Override
-            public void afterTextChanged(Editable arg0) {}
-        });
 
     }
 
@@ -217,13 +206,12 @@ public class DictionaryImport extends AppCompatActivity
         }
 
         protected String doInBackground(String... params) {
-
-
             HttpURLConnection connection = null;
             BufferedReader reader = null;
+            URL url;
 
             try {
-                URL url = new URL(params[0]);
+                url = new URL(params[0]);
                 connection = (HttpURLConnection) url.openConnection();
                 connection.connect();
 
@@ -236,14 +224,12 @@ public class DictionaryImport extends AppCompatActivity
                 String line = "";
 
                 while ((line = reader.readLine()) != null) {
-                    buffer.append(line+"\n");
+                    buffer.append(line + "\n");
                 }
 
                 return buffer.toString();
 
-            } catch (MalformedURLException e) {
-                reportUrl();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 reportUrl();
             } finally {
                 if (connection != null) {
@@ -254,7 +240,7 @@ public class DictionaryImport extends AppCompatActivity
                         reader.close();
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    reportUrl();
                 }
             }
             return null;
@@ -268,10 +254,12 @@ public class DictionaryImport extends AppCompatActivity
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            if (pd.isShowing()){
-                pd.dismiss();
+            if (result != null) {
+                if (pd.isShowing()) {
+                    pd.dismiss();
+                }
+                addDictionary(result);
             }
-            addDictionary(result);
         }
     }
 
