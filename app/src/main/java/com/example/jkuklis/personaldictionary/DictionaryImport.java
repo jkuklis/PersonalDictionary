@@ -59,6 +59,8 @@ public class DictionaryImport extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary_import);
 
+        findViewById(R.id.importButton).setOnClickListener(this);
+
         status = (TextView) findViewById(R.id.importStatus);
         status.setVisibility(View.INVISIBLE);
 
@@ -168,7 +170,7 @@ public class DictionaryImport extends AppCompatActivity
         int dictId = (int) db.createDictionary(dict);
 
         for (int i = 0; i < languages.size(); i++) {
-            Language lang = new Language(dictId, i, languages.get(i), abbreviations.get(i));
+            Language lang = new Language(dictId, i, abbreviations.get(i), languages.get(i));
             db.createLanguage(lang);
         }
 
@@ -278,7 +280,6 @@ public class DictionaryImport extends AppCompatActivity
         switch (v.getId()) {
             case R.id.importButton:
                 new JsonTask().execute(importPath.getText().toString());
-                //"http://headers.jsontest.com/"
                 break;
         }
     }

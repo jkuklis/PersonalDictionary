@@ -33,18 +33,21 @@ public class DictionaryShow extends AppCompatActivity
     implements View.OnClickListener {
     public static final String DICT_ID = "-1";
 
-    private String EXPORT_SUCCESS = "Export successful";
-    private String EXPORT_FAIL = "Export fail";
+    private String EXPORT_SUCCESS = "Export successful!";
+    private String EXPORT_FAIL = "Export fail!";
+    private String EXPORT_JSON_FAIL = "JSON Export fail!";
 
     private int dictId;
     private List<Language> languages = new ArrayList<Language>();
     private List<Entry> entries = new ArrayList<Entry>();
     private List<ColumnValues> values = new ArrayList<ColumnValues>();
+    private List<ColumnValues> valuesCopy = new ArrayList<ColumnValues>();
     private DbHelper db;
-    private RowComparator comparator;
+    private RowComparator comparator = new RowComparator();
     private EntriesAdapter adapter;
     private TextView header;
     private TextView status;
+    private EditText searchField;
     private String dictionaryName;
 
     @Override
@@ -55,6 +58,19 @@ public class DictionaryShow extends AppCompatActivity
         Intent intent = getIntent();
 
         String dictIdString = intent.getStringExtra(DictionariesList.DICT_ID);
+
+        findViewById(R.id.addEntriesButton).setOnClickListener(this);
+        findViewById(R.id.exportDictionaryButton).setOnClickListener(this);
+        findViewById(R.id.deleteDictionaryButton).setOnClickListener(this);
+        findViewById(R.id.filterButton).setOnClickListener(this);
+
+        searchField = (EditText) findViewById(R.id.searchField);
+        searchField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                searchField.setText("");
+            }
+        });
 
         dictId = Integer.parseInt(dictIdString);
 
@@ -75,7 +91,7 @@ public class DictionaryShow extends AppCompatActivity
         int columns = languages.size() + 1;
 
         LinearLayout layout = (LinearLayout) findViewById(R.id.tableHeaders);
-        for (int i = 0; i < columns; i++) {
+        for (int i = 0; i < columns - 1; i++) {
             TextView textView = new TextView(DictionaryShow.this);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                     1400/(columns), LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -108,6 +124,8 @@ public class DictionaryShow extends AppCompatActivity
             }
             values.add(cv);
         }
+
+        valuesCopy.addAll(values);
 
         ListView listView = (ListView) findViewById(R.id.wordsList);
         adapter = new EntriesAdapter(DictionaryShow.this);
@@ -255,6 +273,8 @@ public class DictionaryShow extends AppCompatActivity
         alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialog, int which) {}
         });
+
+        alertDialog.show();
     }
 
     void exportDictionary() {
@@ -279,6 +299,12 @@ public class DictionaryShow extends AppCompatActivity
                 JSONArray jEntries = new JSONArray();
 
                 try {
+
+                    for (Language lang : languages) {
+                        jLanguages.put(lang.getName());
+                        jAbbreviations.put(lang.getAbbr());
+                    }
+
                     for (ColumnValues cv : values) {
                         JSONArray jEntry = new JSONArray();
                         for (int i = 0; i < languages.size(); i++) {
@@ -293,16 +319,16 @@ public class DictionaryShow extends AppCompatActivity
                     jObject.put("entries", jEntries);
 
                 } catch(JSONException e) {
-                    status.setText(EXPORT_FAIL);
+                    status.setText(EXPORT_JSON_FAIL);
                     status.setVisibility(View.VISIBLE);
                     return;
                 }
 
                 try {
                     Writer output = null;
-                    File file = new File("storage/sdcard/" + input.getText() + ".json");
+                    File file = new File("/data/data/" + getApplicationContext().getPackageName() + "/" + input.getText() + ".json");
                     output = new BufferedWriter(new FileWriter(file));
-                    output.write("TODO");
+                    output.write(jObject.toString());
                     output.close();
                     status.setText(EXPORT_SUCCESS);
                     status.setVisibility(View.VISIBLE);
@@ -314,10 +340,23 @@ public class DictionaryShow extends AppCompatActivity
 
             }
         });
+
+        alertDialog.show();
     }
 
     void filterEntries() {
-        
+        EditText search = (EditText) findViewById(R.id.searchField);
+        String pattern = ".*" + search.getText().toString() + ".*";
+        values.clear();
+        for (ColumnValues cv : valuesCopy) {
+            for (int i = 0; i < cv.columns.size(); i++) {
+                if (cv.get(i).matches(pattern)) {
+                    values.add(cv);
+                    break;
+                }
+            }
+        }
+        adapter.notifyDataSetChanged();
     }
 
     @Override

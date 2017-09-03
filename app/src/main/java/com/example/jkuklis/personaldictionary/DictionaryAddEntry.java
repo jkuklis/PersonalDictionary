@@ -32,7 +32,8 @@ public class DictionaryAddEntry extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary_add_entry);
 
-        counter = 0;
+        findViewById(R.id.addEntryButton).setOnClickListener(this);
+        findViewById(R.id.goBackButton).setOnClickListener(this);
 
         status = (TextView) findViewById(R.id.addStatus);
         status.setVisibility(View.INVISIBLE);
@@ -69,7 +70,7 @@ public class DictionaryAddEntry extends AppCompatActivity implements
 
                 @Override
                 public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-                    DictionaryAddEntry.this.words.set(j, word.getText().toString());
+                    save(j, word.getText().toString());
                 }
 
                 @Override
@@ -85,35 +86,31 @@ public class DictionaryAddEntry extends AppCompatActivity implements
         }
     }
 
-    private boolean check_requirements() {
-        for (String word : words) {
-            if (word.equals("")) {
-                return false;
-            }
-        }
-        return true;
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        counter = 0;
+    }
+
+    private void save(int position, String word) {
+        words.set(position, word);
     }
 
     private void addEntry() {
-        if (!check_requirements()) {
-            Entry entry = new Entry(dictId);
+        Entry entry = new Entry(dictId);
 
-            int entryId = (int) db.createEntry(entry);
+        int entryId = (int) db.createEntry(entry);
 
-            for (int i = 0; i < languages.size(); i++) {
-                Word word = new Word(entryId, i, words.get(i));
-                db.createWord(word);
-            }
-
-            counter++;
-
-            status.setText(SUCCESS + String.valueOf(counter));
-            status.setVisibility(View.VISIBLE);
-
-        } else {
-            status.setText(REQUIREMENTS);
-            status.setVisibility(View.VISIBLE);
+        for (int i = 0; i < languages.size(); i++) {
+            Word word = new Word(entryId, i, words.get(i));
+            db.createWord(word);
         }
+
+        counter++;
+
+        status.setText(SUCCESS + String.valueOf(counter));
+        status.setVisibility(View.VISIBLE);
     }
 
     private void goBack() {

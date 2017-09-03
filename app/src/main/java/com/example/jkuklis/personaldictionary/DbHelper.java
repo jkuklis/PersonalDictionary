@@ -53,12 +53,12 @@ public class DbHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_ENTRIES_TABLE = "CREATE TABLE " + TABLE_ENTRIES + "("
             + ENTRY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
-            + ENTRY_DICT_ID + " INTEGER NOT NULL, ";
+            + ENTRY_DICT_ID + " INTEGER NOT NULL" + ")";
 
     private static final String CREATE_WORDS_TABLE = "CREATE TABLE " + TABLE_WORDS + "("
             + WORD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
             + WORD_ENTRY_ID + " INTEGER NOT NULL, "
-            + WORD_POS + "INTEGER NOT NULL, "
+            + WORD_POS + " INTEGER NOT NULL, "
             + WORD_STRING + " TEXT" + ")";
 
 
@@ -116,7 +116,7 @@ public class DbHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(ENTRY_DICT_ID, entry.getDictId());
 
-        long entry_id = db.insert(TABLE_LANGUAGES, null, values);
+        long entry_id = db.insert(TABLE_ENTRIES, null, values);
 
         return entry_id;
     }
@@ -129,7 +129,7 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put(WORD_POS, word.getPos());
         values.put(WORD_STRING, word.getString());
 
-        long word_id = db.insert(TABLE_LANGUAGES, null, values);
+        long word_id = db.insert(TABLE_WORDS, null, values);
 
         return word_id;
     }
@@ -182,7 +182,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public Entry getEntry(long entryId) {
-        Entry entry = new Entry(0, 0, 0);
+        Entry entry = new Entry(0, 0);
 
         String selectQuery = "SELECT * FROM " + TABLE_ENTRIES + " WHERE "
                 + ENTRY_ID + " = " + entryId;
@@ -253,6 +253,7 @@ public class DbHelper extends SQLiteOpenHelper {
         String selectQuery = "SELECT * FROM " + TABLE_DICTIONARIES + " WHERE "
                 + DICT_OWNER + " = '" + owner + "'";
 
+
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
 
@@ -310,7 +311,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
         if (c.moveToFirst()) {
             do {
-                Entry entry = new Entry(0, 0, 0);
+                Entry entry = new Entry(0, 0);
                 entry.setId(c.getInt(c.getColumnIndex(ENTRY_ID)));
                 entry.setDictId(c.getInt(c.getColumnIndex(ENTRY_DICT_ID)));
 
@@ -335,7 +336,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
         if (c.moveToFirst()) {
             do {
-                Entry entry = new Entry(0, 0, 0);
+                Entry entry = new Entry(0, 0);
                 entry.setId(c.getInt(c.getColumnIndex(ENTRY_ID)));
                 entry.setDictId(c.getInt(c.getColumnIndex(ENTRY_DICT_ID)));
 
@@ -422,7 +423,8 @@ public class DbHelper extends SQLiteOpenHelper {
             deleteLang(lang.getId());
         }
 
-        deleteDict(dictId);
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_DICTIONARIES, DICT_ID + " = " + String.valueOf(dictId), null);
     }
 
     public void closeDB() {

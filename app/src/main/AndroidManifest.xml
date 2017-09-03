@@ -55,7 +55,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".DictionariesList" />
         </activity>
-        <activity android:name=".ShowPopUpWindow" />
         <activity android:name=".DictionaryAddEntry" />
     </application>
 
