@@ -1,10 +1,12 @@
 package com.example.jkuklis.personaldictionary;
 
 import android.content.Intent;
+import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Display;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -26,6 +28,8 @@ public class DictionaryAddEntry extends AppCompatActivity implements
     private int dictId;
     private int counter;
     DbHelper db;
+    int width;
+    int height;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,12 @@ public class DictionaryAddEntry extends AppCompatActivity implements
 
         status = (TextView) findViewById(R.id.addStatus);
         status.setVisibility(View.INVISIBLE);
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        width = size.x;
+        height = size.y;
 
         Intent intent = getIntent();
         String dictIdString = intent.getStringExtra(DictionariesList.DICT_ID);
@@ -54,8 +64,8 @@ public class DictionaryAddEntry extends AppCompatActivity implements
 
             TextView lang = new TextView(this);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    500, 200);
-            layoutParams.setMargins(20, 20, 20, 20);
+                    (width-100)/2, (height-100)/12);
+            layoutParams.setMargins(20, 3, 20, 3);
             lang.setLayoutParams(layoutParams);
 
             lang.setText(languages.get(i).getName());

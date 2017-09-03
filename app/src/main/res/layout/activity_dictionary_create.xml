@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -22,10 +22,6 @@
         android:id="@+id/addLanguage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="61dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="61dp"
-        android:layout_marginTop="31dp"
         android:clickable="true"
         app:elevation="3dp"
         app:fabSize="mini"
@@ -34,7 +30,10 @@
         app:layout_constraintLeft_toRightOf="@+id/languageHeader"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:srcCompat="@android:drawable/ic_input_add"
+        android:layout_alignTop="@+id/languageHeader"
+        android:layout_alignRight="@+id/createDictionary"
+        android:layout_alignEnd="@+id/createDictionary" />
 
     <TextView
         android:id="@+id/textView"
@@ -43,26 +42,31 @@
         android:text="@string/lang_header"
         android:textSize="18sp"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="103dp"
-        android:layout_marginLeft="42dp"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_alignBaseline="@+id/textView2"
+        android:layout_alignBottom="@+id/textView2"
+        android:layout_alignLeft="@+id/listViewMain"
+        android:layout_alignStart="@+id/listViewMain"
+        android:layout_marginLeft="17dp"
+        android:layout_marginStart="17dp" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="80dp"
-        android:layout_marginTop="103dp"
         android:text="@string/lang_short_header"
         android:textSize="18sp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="39dp"
+        android:layout_below="@+id/addLanguage"
+        android:layout_toLeftOf="@+id/addLanguage"
+        android:layout_toStartOf="@+id/addLanguage" />
 
     <TextView
         android:id="@+id/warningPlaceholder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="48dp"
         android:text="@string/warning_placeholder"
         android:textColor="@android:color/holo_red_dark"
         android:visibility="invisible"
@@ -70,37 +74,44 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_bias="0.164"
-        android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/listViewMain"
-        app:layout_constraintVertical_bias="0.682" />
+        app:layout_constraintVertical_bias="0.682"
+        android:layout_alignBaseline="@+id/createDictionary"
+        android:layout_alignBottom="@+id/createDictionary"
+        android:layout_alignLeft="@+id/textView"
+        android:layout_alignStart="@+id/textView"
+        android:layout_marginLeft="32dp"
+        android:layout_marginStart="32dp" />
 
     <Button
         android:id="@+id/createDictionary"
         android:layout_width="113dp"
         android:layout_height="59dp"
-        android:layout_marginLeft="217dp"
         android:text="@string/create_dictionary"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="26dp"
-        android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_bias="0.173"
-        android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/listViewMain"
-        app:layout_constraintVertical_bias="0.619" />
+        app:layout_constraintVertical_bias="0.619"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/languageHeader"
+        android:layout_toEndOf="@+id/languageHeader"
+        android:layout_marginBottom="15dp" />
 
     <ListView
         android:id="@+id/listViewMain"
         android:layout_width="351dp"
         android:layout_height="254dp"
         android:layout_gravity="bottom"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="143dp"
+        android:layout_marginTop="14dp"
         android:layout_weight="0.36"
         app:layout_constraintHorizontal_bias="0.36"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/createDictionary" />
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

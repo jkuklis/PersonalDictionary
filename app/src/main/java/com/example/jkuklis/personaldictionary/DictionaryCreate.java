@@ -220,10 +220,11 @@ public class DictionaryCreate extends AppCompatActivity implements
         }
 
         public void delete_language(int position) {
+            warning.setText(String.valueOf(position));
+            warning.setVisibility(View.VISIBLE);
             if (languages.size() > 1) {
                 languages.remove(position);
                 warning.setVisibility(View.INVISIBLE);
-                this.notifyDataSetChanged();
 
             } else {
                 warning.setText(LANG_LOWER_LIMIT);

@@ -2,11 +2,13 @@ package com.example.jkuklis.personaldictionary;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Point;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -49,6 +51,8 @@ public class DictionaryShow extends AppCompatActivity
     private TextView status;
     private EditText searchField;
     private String dictionaryName;
+    int width;
+    int height;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,12 +69,6 @@ public class DictionaryShow extends AppCompatActivity
         findViewById(R.id.filterButton).setOnClickListener(this);
 
         searchField = (EditText) findViewById(R.id.searchField);
-        searchField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                searchField.setText("");
-            }
-        });
 
         dictId = Integer.parseInt(dictIdString);
 
@@ -90,11 +88,17 @@ public class DictionaryShow extends AppCompatActivity
 
         int columns = languages.size() + 1;
 
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        width = size.x;
+        height = size.y;
+
         LinearLayout layout = (LinearLayout) findViewById(R.id.tableHeaders);
         for (int i = 0; i < columns - 1; i++) {
             TextView textView = new TextView(DictionaryShow.this);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    1400/(columns), LinearLayout.LayoutParams.WRAP_CONTENT);
+                    (width-100)/(columns), LinearLayout.LayoutParams.WRAP_CONTENT);
             layoutParams.setMargins(20, 20, 20, 20);
             textView.setLayoutParams(layoutParams);
             textView.setText(languages.get(i).getAbbr());
@@ -110,7 +114,7 @@ public class DictionaryShow extends AppCompatActivity
 
         TextView textView = new TextView(DictionaryShow.this);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                1400/(columns), LinearLayout.LayoutParams.WRAP_CONTENT);
+                (width-150)/(columns), LinearLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(20, 20, 20, 20);
         textView.setLayoutParams(layoutParams);
         textView.setText("del");
@@ -199,7 +203,7 @@ public class DictionaryShow extends AppCompatActivity
             for (int i = 0; i < numOfColumns; i++) {
                 TextView textView = new TextView(activity);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                        1400/(numOfColumns + 1), LinearLayout.LayoutParams.WRAP_CONTENT);
+                        (width-100)/(numOfColumns + 1), LinearLayout.LayoutParams.WRAP_CONTENT);
                 layoutParams.setMargins(20, 20, 20, 20);
                 textView.setLayoutParams(layoutParams);
 
@@ -345,8 +349,7 @@ public class DictionaryShow extends AppCompatActivity
     }
 
     void filterEntries() {
-        EditText search = (EditText) findViewById(R.id.searchField);
-        String pattern = ".*" + search.getText().toString() + ".*";
+        String pattern = ".*" + searchField.getText().toString() + ".*";
         values.clear();
         for (ColumnValues cv : valuesCopy) {
             for (int i = 0; i < cv.columns.size(); i++) {

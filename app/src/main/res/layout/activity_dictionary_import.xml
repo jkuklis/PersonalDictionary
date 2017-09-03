@@ -8,14 +8,14 @@
 
     <TextView
         android:id="@+id/importInfo"
-        android:layout_width="265dp"
-        android:layout_height="29dp"
+        android:layout_width="290dp"
+        android:layout_height="33dp"
         android:text="@string/import_info"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="57dp"
-        app:layout_constraintHorizontal_bias="0.501" />
+        app:layout_constraintHorizontal_bias="0.511" />
 
     <EditText
         android:id="@+id/importPath"

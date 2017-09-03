@@ -66,14 +66,14 @@
         android:layout_width="match_parent"
         android:layout_height="14dp"
         android:orientation="horizontal"
-        android:layout_weight="0.14"></LinearLayout>
+        android:layout_weight="0.27"></LinearLayout>
 
     <ListView
         android:id="@+id/wordsList"
         android:layout_width="wrap_content"
-        android:layout_height="331dp"
+        android:layout_height="324dp"
         android:visibility="visible"
-        android:layout_weight="0.26" />
+        android:layout_weight="0.12" />
 
     <RelativeLayout
         android:layout_width="match_parent"

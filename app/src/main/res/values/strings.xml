@@ -31,8 +31,8 @@
     <string name="search_status">Status</string>
     <string name="add_status">Status</string>
     <string name="back_button">Back</string>
-    <string name="import_info">Fill in the path to import a dictionary</string>
-    <string name="import_path">Json dictionary file path</string>
+    <string name="import_info">Fill in the URL path to JSON dictionary string</string>
+    <string name="import_path">Path</string>
     <string name="import_button">Import</string>
     <string name="import_status">Status</string>
 </resources>
